@@ -71,8 +71,6 @@ function App() {
   const [isConsoleOpen, setIsConsoleOpen] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isPayingSalaries, setIsPayingSalaries] = useState<boolean>(false);
-  const [liveExpenseDesc, setLiveExpenseDesc] = useState<string>('');
-  const [liveExpenseAmount, setLiveExpenseAmount] = useState<string>('');
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [webhooksLogs, setWebhooksLogs] = useState<WebhookLog[]>([
     { id: '1', timestamp: new Date().toLocaleTimeString(), tag: 'NOMBA_API', message: 'Nomba payment rails connected successfully.' },
