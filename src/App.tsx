@@ -1335,6 +1335,84 @@ function App() {
           </div>
         )}
 
+        {activeTab === 'inventory' && (
+          <div className="dashboard-grid">
+            <div className="card" style={{ gridColumn: 'span 8' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Package /> Stock Ledger & Shop Performance</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                Inventory levels auto-deduct in real time as sales webhooks settle via Nomba checkout interfaces.
+              </p>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Current Stock</th>
+                    <th>Weekly Velocity</th>
+                    <th>AI Stockout Predictor</th>
+                    <th>Supplier</th>
+                    <th>Total Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map(p => (
+                    <tr key={p.id}>
+                      <td style={{ fontWeight: 700 }}>{p.name}</td>
+                      <td>₦{p.price.toLocaleString()}</td>
+                      <td style={{ fontWeight: 700, color: p.stock <= p.reorderPoint ? 'var(--danger-red)' : 'var(--text-primary)' }}>
+                        {p.stock} units
+                      </td>
+                      <td>{p.velocity} units / wk</td>
+                      <td>
+                        {p.stock <= p.reorderPoint ? (
+                          <span className="badge high" style={{ fontSize: '10px' }}>
+                            Stockout in {Math.round((p.stock / p.velocity) * 7)} days!
+                          </span>
+                        ) : (
+                          <span className="badge success" style={{ fontSize: '10px' }}>
+                            Safe ({Math.round((p.stock / p.velocity) * 7)} days buffer)
+                          </span>
+                        )}
+                      </td>
+                      <td>{p.supplier}</td>
+                      <td style={{ fontWeight: 800, fontFamily: 'var(--font-mono)' }}>₦{p.revenue.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 4' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><MessageSquare /> AI Reorder Engine</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                AI analyzes sales trends and automatically drafts order invoices to suppliers based on cash balance.
+              </p>
+
+              <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '8px', borderLeft: '3px solid var(--danger-red)', fontSize: '13px', marginBottom: '14px' }}>
+                <div style={{ fontWeight: 700, color: 'var(--danger-red)', marginBottom: '4px' }}>Critical Action Required: Sleek Kaftan</div>
+                <p style={{ color: 'var(--text-primary)' }}>
+                  Velocity is high (5 units/wk), current stock: 3 units. Expected stockout date is tomorrow.
+                </p>
+                <div style={{ marginTop: '8px', fontWeight: 600, color: 'var(--accent-gold)' }}>
+                  Recommended: Order 25 units from Kano Cotton Mills (₦1,625,000). Cash flow supports this spend.
+                </div>
+              </div>
+
+              <button className="btn btn-gold" style={{ width: '100%' }} onClick={() => {
+                showToast("Reorder order sent to Kano Cotton Mills via simulated API", "success");
+                addLog('NOMBA_API', "Outgoing payout invoice created: ₦1,625,000 pending vendor payout confirmation");
+              }}>
+                Disburse Payout & Restock
+              </button>
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );
