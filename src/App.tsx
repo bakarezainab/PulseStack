@@ -1775,6 +1775,66 @@ function App() {
         </div>
       </aside>
 
+      <footer className="dev-console" style={{
+        height: isConsoleOpen ? '180px' : '40px',
+        padding: isConsoleOpen ? '16px' : '10px 16px',
+        overflow: 'hidden',
+        transition: 'all 0.3s ease-in-out'
+      }}>
+        {!isConsoleOpen ? (
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', cursor: 'pointer' }} onClick={() => setIsConsoleOpen(true)}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)' }}>
+              <Terminal size={14} style={{ color: 'var(--electric-blue-bright)' }} />
+              <span>Sandbox Developer Webhook Console (Collapsed)</span>
+            </div>
+            <button className="btn" style={{ padding: '2px 8px', fontSize: '11px' }} onClick={(e) => { e.stopPropagation(); setIsConsoleOpen(true); }}>
+              ▲ Expand Console
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="console-controls">
+              <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Terminal size={14} style={{ color: 'var(--electric-blue-bright)' }} /> Webhook Trigger Engine
+                </div>
+                <button className="btn btn-secondary" style={{ padding: '2px 8px', fontSize: '10px', height: '22px' }} onClick={() => setIsConsoleOpen(false)}>
+                  ▼ Collapse
+                </button>
+              </div>
+              <p style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                Simulate central Nomba webhook events routing payments to respective modules.
+              </p>
+              <button className="console-btn accent" onClick={() => simulatePaymentWebhook('card')}>
+                Simulate Card Payment (Collections)
+              </button>
+              <button className="console-btn" onClick={() => simulatePaymentWebhook('rent')}>
+                Simulate Rent Webhook (Properties)
+              </button>
+              <button className="console-btn" onClick={() => simulatePaymentWebhook('ajo')}>
+                Simulate Mrs Ngozi (Ajo Pools)
+              </button>
+              <button className="console-btn" onClick={() => simulatePaymentWebhook('suspicious')}>
+                Simulate Suspicious payment
+              </button>
+            </div>
+
+            <div className="console-logs">
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-color)', paddingBottom: '4px', marginBottom: '4px' }}>
+                Unified Webhook Routing Terminal Logs (Zero Manual Refresh Required)
+              </div>
+              {webhooksLogs.map(log => (
+                <div key={log.id} className="log-entry">
+                  <span className="log-timestamp">[{log.timestamp}]</span>
+                  <span className="log-tag">[{log.tag}]</span>
+                  <span className="log-message">{log.message}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </footer>
+
       {!isAiOpen && (
         <button className="ai-chat-floating-toggle" style={{ display: 'flex' }} onClick={() => setIsAiOpen(true)}>
           <MessageSquare size={24} />
