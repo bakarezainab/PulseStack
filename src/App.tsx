@@ -942,6 +942,158 @@ function App() {
 
           </div>
         )}
+        {activeTab === 'collections' && (
+          <div className="dashboard-grid">
+            <div className="card" style={{ gridColumn: 'span 7' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><CreditCard /> Active Payment Links</span>
+                <button className="btn btn-secondary" onClick={() => setShowPaymentLinkModal(true)}>
+                  <Plus size={16} /> Add Link
+                </button>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                Generate immediate Nomba checkout links to accept cards, bank transfers, and mobile money.
+              </p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Description</th>
+                    <th>Link URL</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactions.filter(t => t.type === 'payment_link').map(t => (
+                    <tr key={t.id}>
+                      <td style={{ fontWeight: 600 }}>{t.sender}</td>
+                      <td>{t.description}</td>
+                      <td>
+                        <code style={{ fontSize: '11px', color: 'var(--electric-blue-bright)' }}>
+                          https://pay.nomba.com/l/{t.id.toLowerCase()}
+                        </code>
+                      </td>
+                      <td>
+                        <span className={`badge ${t.status}`}>{t.status}</span>
+                      </td>
+                      <td style={{ fontWeight: 700 }}>₦{t.amount.toLocaleString()}</td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => {
+                            navigator.clipboard.writeText(`https://pay.nomba.com/l/${t.id.toLowerCase()}`);
+                            showToast("Payment link copied to clipboard!", "success");
+                          }}>
+                            Copy
+                          </button>
+                          {t.status === 'pending' && (
+                            <button className="btn btn-gold" style={{ padding: '4px 8px', fontSize: '11px', color: 'var(--bg-darkest)' }} onClick={() => {
+                              setTransactions(prev => prev.map(item => item.id === t.id ? { ...item, status: 'success' } : item));
+                              setBalance(prev => prev + t.amount);
+                              addLog('WEBHOOK', `[NOMBA WEBHOOK] payment.link.paid | TXID: ${t.id} | Amount: ₦${t.amount.toLocaleString()} | Customer: ${t.sender} settled.`);
+                              showToast(`Webhook simulated: ₦${t.amount.toLocaleString()} received from ${t.sender}!`, 'success');
+                            }}>
+                              Settle
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 5' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Building /> Active Virtual Accounts</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                Dedicated Providus/Wema bank accounts assigned to customers for automatic webhook reconciliation.
+              </p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {tenants.map(t => (
+                  <div key={t.id} style={{ padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-darker)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ fontWeight: 700 }}>{t.name}</span>
+                      <span className="badge success">Active</span>
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                      <div>Bank: <b>Providus Bank</b></div>
+                      <div>Account: <b>902837482{t.id.slice(-1)}</b></div>
+                      <div>Assigned: <b>Property Flat</b></div>
+                      <div>Webhook Target: <b>Rent Handler</b></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><ShieldAlert /> Real-time Payment Security Inspector</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '12px' }}>
+                AI monitors incoming payment signatures to stop chargebacks and flag fraud prior to Nomba settlement.
+              </p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ borderLeft: '3px solid var(--danger-red)', padding: '10px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '4px', fontSize: '12px' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--danger-red)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <ShieldAlert size={14} /> Suspicious Transaction Flagged (TX-9019)
+                  </div>
+                  <div style={{ margin: '4px 0', color: 'var(--text-primary)' }}>
+                    Amount: ₦320,000 | Sender: Unknown Cardholder
+                  </div>
+                  <div style={{ color: 'var(--text-secondary)' }}>
+                    AI Analysis: Card BIN issued in Brazil (BIN: 453271), executing from IP address in Ikeja, Nigeria. Session velocity exceeded standard thresholds. Settle on Hold.
+                  </div>
+                </div>
+
+                <div style={{ borderLeft: '3px solid var(--success-green)', padding: '10px', background: 'rgba(16, 185, 129, 0.05)', borderRadius: '4px', fontSize: '12px' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--success-green)' }}>
+                    Verified Remittance Route (TX-9020)
+                  </div>
+                  <div style={{ margin: '4px 0', color: 'var(--text-primary)' }}>
+                    Amount: ₦620,000 ($400 USDT Equivalent) | Sender: Chidi Obi (UK)
+                  </div>
+                  <div style={{ color: 'var(--text-secondary)' }}>
+                    AI Analysis: Payout routed via NOWPayments API, settled to Nomba MFB account. Wallet signature matches historical UK remittance cycles. Verified & Cleared.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Globe /> Crypto Acceptance Portal</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                Accept USDT/USDC directly from customers and instantly convert/route as Naira to your Nomba Wallet.
+              </p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', background: 'var(--bg-darker)', padding: '16px', borderRadius: '8px' }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>USDT/USDC Live Rate</div>
+                  <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--accent-gold)', margin: '4px 0' }}>₦1,550.00 / $1</div>
+                  <div style={{ fontSize: '11px', color: 'var(--success-green)' }}>+0.4% in 24h • AI conversion optimized</div>
+                </div>
+                <div style={{ fontSize: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px' }}>
+                  <div>• Settle to: <b>Nomba Wallet (1023948576)</b></div>
+                  <div>• Network: <b>TRON (TRC-20) / Polygon</b></div>
+                  <div>• Gateway: <b>NOWPayments API Webhook</b></div>
+                </div>
+              </div>
+              
+              <button className="btn btn-gold" style={{ width: '100%', marginTop: '16px' }} onClick={() => setActiveTab('diaspora')}>
+                Go to Diaspora Remittance Portal
+              </button>
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );
