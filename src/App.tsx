@@ -1094,6 +1094,102 @@ function App() {
           </div>
         )}
 
+        {activeTab === 'rent' && (
+          <div className="dashboard-grid">
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Building /> Real Estate Portfolio & Tenant Ledger</span>
+                <button className="btn" onClick={() => setShowAddTenantModal(true)}>
+                  <Plus size={16} /> Add Property / Tenant
+                </button>
+              </div>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tenant</th>
+                    <th>Property Assigned</th>
+                    <th>Monthly Rent</th>
+                    <th>Due Date</th>
+                    <th>AI Default Risk</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tenants.map(t => (
+                    <tr key={t.id}>
+                      <td style={{ fontWeight: 700 }}>{t.name}</td>
+                      <td>{t.property}</td>
+                      <td style={{ fontFamily: 'var(--font-mono)' }}>₦{t.rentAmount.toLocaleString()}</td>
+                      <td>{t.dueDate}</td>
+                      <td>
+                        <span className={`badge ${t.riskScore}`}>
+                          {t.riskScore} Risk
+                        </span>
+                        <div style={{ fontSize: '10px', color: 'var(--text-secondary)', marginTop: '2px', maxWidth: '280px' }}>
+                          {t.riskAnalysis}
+                        </div>
+                      </td>
+                      <td>
+                        <span className={`badge ${t.status}`}>{t.status}</span>
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          {t.status !== 'paid' && (
+                            <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => triggerRentNudge(t)}>
+                              Draft Nudge
+                            </button>
+                          )}
+                          <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => {
+                            showToast(`Rent Webhook Simulated for ${t.name}`, 'info');
+                            simulatePaymentWebhook('rent');
+                          }}>
+                            Simulate Webhook Pay
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><MessageSquare /> AI Nudge Draft Engine</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                When tenants fall behind, the AI analyzes payment history and generates personalized reminders in English or Pidgin to encourage quick settlement without friction.
+              </p>
+              
+              <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '8px', borderLeft: '3px solid var(--accent-gold)', fontSize: '13px' }}>
+                <div style={{ fontWeight: 700, marginBottom: '6px', color: 'var(--accent-gold)' }}>Auto-Draft Template: Default Risk (Segun Arinze)</div>
+                <p style={{ fontStyle: 'italic', color: 'var(--text-primary)' }}>
+                  "Abeg Segun, how body? PulseAI notice say the rent for Office Suite 3B (₦350,000) overdue since June 25. Cash flow is important for business, so click this Nomba link to clear: pay.nomba.com/l/tx-segun. Bless up."
+                </p>
+              </div>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Globe /> Diaspora Tenant Portal</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '12px' }}>
+                Do you have tenant sponsors living abroad? They can settle invoices using USDC/USDT directly from their wallets, routing to your Nomba account in Nigeria.
+              </p>
+              <div style={{ border: '1px dashed var(--border-color)', padding: '16px', borderRadius: '8px', background: 'var(--bg-darkest)', textAlign: 'center' }}>
+                <Globe size={32} style={{ color: 'var(--electric-blue-bright)', marginBottom: '8px' }} />
+                <div style={{ fontWeight: 700, fontSize: '14px' }}>Diaspora Sponsor Checkout active</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0' }}>Saves 12% on conversion fees relative to standard remittance corridors.</div>
+                <button className="btn btn-secondary" style={{ marginTop: '8px' }} onClick={() => setActiveTab('diaspora')}>
+                  Open Remittance Interface
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );
