@@ -1190,6 +1190,151 @@ function App() {
           </div>
         )}
 
+        {activeTab === 'payroll' && (
+          <div className="dashboard-grid">
+            
+            {/* Duplication anomaly alert */}
+            {employees.some(e => e.isDuplicate) && (
+              <div className="card" style={{ gridColumn: 'span 12', borderColor: 'var(--danger-red)', background: 'rgba(239, 68, 68, 0.05)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                    <ShieldAlert size={24} style={{ color: 'var(--danger-red)' }} />
+                    <div>
+                      <h4 style={{ color: 'var(--text-primary)', margin: 0, fontSize: '15px' }}>🚨 Payroll Anomaly Detected by PulseAI</h4>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '13px', margin: '4px 0 0 0' }}>
+                        Victor Nwachukwu (EMP-04) is listed twice with matching bank details (Nomba MFB - 1019948271) under Creative & Design. Bulk payout is blocked to avoid loss of funds.
+                      </p>
+                    </div>
+                  </div>
+                  <button className="btn btn-gold" onClick={handleRemoveDuplicate}>
+                    Resolve duplicate entry
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Users /> Employee Directory & Bulk Payout Console</span>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button className="btn btn-secondary" onClick={() => {
+                    setEmployees(prev => prev.map(e => ({ ...e, status: 'unpaid' })));
+                    showToast("Payroll reset to unpaid state", "info");
+                  }} disabled={isPayingSalaries}>
+                    Reset Payroll
+                  </button>
+                  <button className="btn" onClick={runSalaryDay} disabled={isPayingSalaries}>
+                    {isPayingSalaries ? "Disbursing..." : "One-Click Salary Day"}
+                  </button>
+                </div>
+              </div>
+
+              {isPayingSalaries && (
+                <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '8px', marginBottom: '16px', borderLeft: '3px solid var(--accent-gold)' }}>
+                  <style>{`
+                    @keyframes payoutProgress {
+                      0% { transform: translateX(-100%); }
+                      100% { transform: translateX(150%); }
+                    }
+                  `}</style>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text-primary)' }}>Executing Nomba Bulk Payout API ...</span>
+                    <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--accent-gold)', fontWeight: 700 }}>Processing</span>
+                  </div>
+                  <div style={{ height: '4px', background: 'var(--border-color)', borderRadius: '2px', overflow: 'hidden', position: 'relative' }}>
+                    <div style={{ height: '100%', width: '40%', background: 'var(--accent-gold)', position: 'absolute', left: 0, top: 0, animation: 'payoutProgress 1.2s infinite ease-in-out' }}></div>
+                  </div>
+                </div>
+              )}
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Emp ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Nomba Bank Details</th>
+                    <th>Monthly Salary</th>
+                    <th>Last Payout</th>
+                    <th>Status</th>
+                    <th>Payslip</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {employees.map(e => (
+                    <tr key={e.id} style={e.isDuplicate ? { backgroundColor: 'rgba(239, 68, 68, 0.04)' } : {}}>
+                      <td style={{ fontFamily: 'var(--font-mono)' }}>{e.id}</td>
+                      <td style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {e.name}
+                        {e.isDuplicate && <span className="badge high" style={{ fontSize: '8px', padding: '2px 4px' }}>DUPLICATE</span>}
+                      </td>
+                      <td>{e.department}</td>
+                      <td>{e.bank} - {e.accountNumber}</td>
+                      <td style={{ fontWeight: 700 }}>₦{e.salary.toLocaleString()}</td>
+                      <td>{e.lastPaidDate || 'Not paid this cycle'}</td>
+                      <td>
+                        <span className={`badge ${e.status === 'paid' ? 'success' : 'pending'}`}>{e.status}</span>
+                      </td>
+                      <td>
+                        {e.status === 'paid' ? (
+                          <button className="btn btn-secondary" style={{ padding: '2px 8px', fontSize: '11px' }} onClick={() => setShowPayslipModal(e)}>
+                            <FileText size={12} /> View Payslip
+                          </button>
+                        ) : '-'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><TrendingUp /> Optimal Salary Payout Date Selector</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                AI analyzes payment clearance data from your Nomba links and virtual accounts to find the day with maximum cash flow liquid buffer.
+              </p>
+              
+              <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>AI Optimal Date</div>
+                  <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--electric-blue-bright)', margin: '4px 0' }}>July 28th</div>
+                  <div style={{ fontSize: '11px', color: 'var(--success-green)' }}>Reconciles with 94% of tenant payments</div>
+                </div>
+                <div style={{ fontSize: '12px', color: 'var(--text-secondary)', maxWidth: '240px' }}>
+                  "Paying salaries on the 28th decreases overdraft risk by 45%. Settle on this day because merchant card settle lag matches weekend cycle."
+                </div>
+              </div>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Users /> Nomba Payout Integration Status</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '12px' }}>
+                <div style={{ border: '1px solid var(--border-color)', padding: '10px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>API Status</div>
+                  <div style={{ fontWeight: 700, color: 'var(--success-green)' }}>OPERATIONAL</div>
+                </div>
+                <div style={{ border: '1px solid var(--border-color)', padding: '10px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Daily limit</div>
+                  <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>₦5,000,000 / ₦5m</div>
+                </div>
+                <div style={{ border: '1px solid var(--border-color)', padding: '10px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Bulk payout latency</div>
+                  <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>0.8 seconds / trx</div>
+                </div>
+                <div style={{ border: '1px solid var(--border-color)', padding: '10px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Webhook endpoint</div>
+                  <div style={{ fontWeight: 700, color: 'var(--electric-blue-bright)' }}>ACTIVE</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )}
+
       </main>
     </div>
   );
