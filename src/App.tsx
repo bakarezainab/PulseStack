@@ -1537,6 +1537,98 @@ function App() {
           </div>
         )}
 
+        {activeTab === 'ajo' && (
+          <div className="dashboard-grid">
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><TrendingUp /> Ajo & Cooperative Collections Dashboard</span>
+                <span className="badge success">Active Pool</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                Create automated ajo contribution circles. Members pay via Nomba links; AI predicts defaults and triggers SMS nudges.
+              </p>
+
+              {ajoPools.map(pool => (
+                <div key={pool.id} style={{ background: 'var(--bg-darker)', padding: '20px', borderRadius: '10px', border: '1px solid var(--border-color)', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <div>
+                      <h4 style={{ fontSize: '16px', fontWeight: 800 }}>{pool.name}</h4>
+                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Target: ₦{pool.targetAmount.toLocaleString()} • Current Recipient: <b>{pool.recipient}</b></span>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--electric-blue-bright)' }}>
+                        ₦{pool.currentContribution.toLocaleString()}
+                      </span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}> of ₦{pool.targetAmount.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div style={{ height: '8px', background: 'var(--bg-darkest)', borderRadius: '4px', overflow: 'hidden', marginBottom: '20px' }}>
+                    <div style={{ height: '100%', background: 'linear-gradient(to right, var(--electric-blue), var(--electric-blue-bright))', width: `${(pool.currentContribution / pool.targetAmount) * 100}%` }}></div>
+                  </div>
+
+                  {/* Members contribution table */}
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ margin: 0 }}>
+                      <thead>
+                        <tr>
+                          <th>Member</th>
+                          <th>Allocation Amount</th>
+                          <th>Status</th>
+                          <th>AI Delinquency Predictor</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {pool.members.map((m, idx) => (
+                          <tr key={idx}>
+                            <td style={{ fontWeight: 600 }}>{m.name}</td>
+                            <td>₦{m.amount.toLocaleString()}</td>
+                            <td>
+                              <span className={`badge ${m.paid ? 'success' : 'pending'}`}>
+                                {m.paid ? 'Paid' : 'Unpaid'}
+                              </span>
+                            </td>
+                            <td>
+                              <span className={`badge ${m.riskScore}`}>
+                                {m.riskScore} Default Risk
+                              </span>
+                              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', marginLeft: '10px' }}>
+                                {m.riskAnalysis}
+                              </span>
+                            </td>
+                            <td>
+                              <div style={{ display: 'flex', gap: '8px' }}>
+                                {!m.paid && (
+                                  <button className="btn btn-secondary" style={{ padding: '2px 8px', fontSize: '11px' }} onClick={() => {
+                                    const nudgeDraft = `Hello ${m.name}, Ajo cooperative contributions are active. Your payment of ₦${m.amount.toLocaleString()} is due. Please click this Nomba link to clear: pay.nomba.com/ajo/${pool.id}`;
+                                    setShowNudgeModal({ open: true, tenantName: m.name, draft: nudgeDraft });
+                                  }}>
+                                    Nudge Member
+                                  </button>
+                                )}
+                                {!m.paid && (
+                                  <button className="btn btn-secondary" style={{ padding: '2px 8px', fontSize: '11px' }} onClick={() => {
+                                    showToast(`Ajo webhook payment simulated for ${m.name}`, 'info');
+                                    simulatePaymentWebhook('ajo');
+                                  }}>
+                                    Simulate Pay
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );
