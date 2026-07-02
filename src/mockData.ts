@@ -314,3 +314,123 @@ export const INITIAL_AJO_POOLS: AjoPool[] = [
   }
 ];
 
+export const getBusinessHealth = (expenses: Expense[], transactions: Transaction[], tenants: Tenant[]): BusinessHealth => {
+  const totalRevenue = transactions
+    .filter(t => t.status === 'success')
+    .reduce((sum, t) => sum + (t.type === 'payout' ? -t.amount : t.amount), 0);
+  
+  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const expenseRatio = totalRevenue > 0 ? (totalExpenses / totalRevenue) : 0.4;
+  
+  let expenseControlScore = Math.max(10, Math.min(100, Math.round(100 - (expenseRatio * 100))));
+  let cashFlowScore = 88;
+  let paymentConsistencyScore = 75;
+  let revenueGrowthScore = 82;
+
+  const overdueTenantsCount = tenants.filter(t => t.status === 'overdue').length;
+  paymentConsistencyScore -= (overdueTenantsCount * 15);
+
+  const totalFuelSpend = expenses.filter(e => e.category === 'Generator/Fuel').reduce((sum, e) => sum + e.amount, 0);
+  if (totalFuelSpend > 120000) {
+    expenseControlScore = Math.max(20, expenseControlScore - 12);
+  }
+
+  const score = Math.round((cashFlowScore + paymentConsistencyScore + expenseControlScore + revenueGrowthScore) / 4);
+
+  const actionPoints = [
+    `Your expense ratio is high (${Math.round(expenseRatio * 100)}%). Consider optimizing logistical operations.`,
+    totalFuelSpend > 100000 ? `You spent ₦${(totalFuelSpend / 1000).toFixed(0)}k on fuel recently. Consider solar backup alternatives for the Lekki office.` : "Fuel expenses are within normal boundaries.",
+    overdueTenantsCount > 0 ? `Follow up on the ${overdueTenantsCount} overdue tenant payments immediately. AI generated nudges are ready in Rent Manager.` : "Tenant payments are stable this cycle.",
+    "Optimal salary date predicted to be the 28th based on payment cycle arrivals (Nomba payment links settle on T+1)."
+  ];
+
+  return {
+    score,
+    cashFlowScore,
+    paymentConsistencyScore,
+    expenseControlScore,
+    revenueGrowthScore,
+    actionPoints
+  };
+};
+
+export const parseAiCommand = (
+  command: string, 
+  state: {
+    tenants: Tenant[];
+    employees: Employee[];
+    expenses: Expense[];
+    products: Product[];
+    transactions: Transaction[];
+    ajoPools: AjoPool[];
+  },
+  triggerAction: (action: string, payload?: any) => void
+): { text: string; actionTriggered?: string } => {
+  const normalized = command.toLowerCase();
+  
+  if (normalized.includes('rent') || normalized.includes('tenant') || normalized.includes('who never pay')) {
+    const unpaid = state.tenants.filter(t => t.status === 'overdue' || t.status === 'pending');
+    if (unpaid.length === 0) {
+      return { text: "No unpaid rent! All your tenants don pay completely. Business pulse is clean! 📈" };
+    }
+    return {
+      text: `Zainab, Segun Arinze never pay rent (overdue since June 25). Chinedu Okafor dey pending (due July 4). AI predicts Chinedu will pay, but Segun profile get high risk. You want make I draft auto-reminders for them? 📝`,
+      actionTriggered: "NAVIGATE_RENT"
+    };
+  }
+
+  if (normalized.includes('salary') || normalized.includes('salaries') || normalized.includes('pay staff') || normalized.includes('payroll')) {
+    const duplicate = state.employees.some(e => e.isDuplicate);
+    if (duplicate) {
+      return {
+        text: "🚨 Hold on, Zainab! PulseAI detect anomaly. Victor Nwachukwu dey enter twice inside payroll (Duplicate Name & Account Number). If I pay now, double transfer go fire. Clear the duplicate first. Let's fix this in the Payroll manager. 🛑",
+        actionTriggered: "NAVIGATE_PAYROLL"
+      };
+    }
+    return {
+      text: "All staff payroll is clean, no duplicates found. Total salary payout: ₦325,000. Click 'Pay all staff salaries' in the Payroll section to disburse immediately via Nomba Payouts. 💸",
+      actionTriggered: "NAVIGATE_PAYROLL"
+    };
+  }
+
+  if (normalized.includes('fuel') || normalized.includes('spend on fuel') || normalized.includes('generator')) {
+    const fuelSpend = state.expenses
+      .filter(e => e.category === 'Generator/Fuel')
+      .reduce((sum, e) => sum + e.amount, 0);
+    return {
+      text: `You spent ₦${(fuelSpend/1000).toFixed(0)}k on fuel this month, Zainab. That's about ${Math.round((fuelSpend / state.expenses.reduce((s, e) => s + e.amount, 0)) * 100)}% of your total logged expenses. With fuel prices rising, moving to a solar inverter system of ₦1.8M will break even in 12 months. ☀️`,
+      actionTriggered: "NAVIGATE_EXPENSES"
+    };
+  }
+
+  if (normalized.includes('invoice') || normalized.includes('emeka') || normalized.includes('generate')) {
+    const match = normalized.match(/(\d+[\d,]*)/);
+    const amount = match ? parseInt(match[0].replace(/,/g, '')) : 250000;
+    
+    triggerAction("CREATE_PAYMENT_LINK", { sender: "Emeka Okoye", amount, description: "Branding work - PulseStack Invoice" });
+
+    return {
+      text: `Done! I don generate Nomba payment link of ₦${amount.toLocaleString()} for Emeka Okoye for "Branding work". Payment link don ready and transaction is pending checkout. 🔗`,
+      actionTriggered: "CREATE_PAYMENT_LINK_SUCCESS"
+    };
+  }
+
+  if (normalized.includes('health') || normalized.includes('score') || normalized.includes('pulse')) {
+    const health = getBusinessHealth(state.expenses, state.transactions, state.tenants);
+    return {
+      text: `Your current Business Health Score is ${health.score}/100. Cash flow is strong (${health.cashFlowScore}), but expense control is low (${health.expenseControlScore}) due to fuel. Check the Health panel for complete recommendations. 📈`,
+      actionTriggered: "NAVIGATE_HEALTH"
+    };
+  }
+
+  if (normalized.includes('dollar') || normalized.includes('send dollars') || normalized.includes('remittance') || normalized.includes('diaspora') || normalized.includes('usdt')) {
+    return {
+      text: "Yes, today is a good time! Current rate is ₦1,550/$. Rate trends show slight appreciation of Naira tomorrow. If you send USDC/USDT now, you get high value conversion before the market settles. Click Diaspora Send to proceed. 🌍",
+      actionTriggered: "NAVIGATE_DIASPORA"
+    };
+  }
+
+  return {
+    text: "I hear you, Zainab. I understand Pidgin & plain English. You can ask me: 'Who never pay rent?', 'How much did I spend on fuel?', 'Pay staff salaries', 'Generate invoice for Emeka of N250k', or 'What is my business health score?'"
+  };
+};
