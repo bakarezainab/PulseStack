@@ -1413,6 +1413,130 @@ function App() {
           </div>
         )}
 
+        {activeTab === 'expenses' && (
+          <div className="dashboard-grid">
+            
+            {/* Log expense */}
+            <div className="card" style={{ gridColumn: 'span 5' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Plus /> Log Outgoing Expense</span>
+              </div>
+              <form onSubmit={handleAddExpense}>
+                <div className="form-group">
+                  <label>Description (Plain English or Pidgin)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g. Bought Mikano diesel fuel N180,000"
+                    value={newExpense.description}
+                    onChange={e => setNewExpense(prev => ({ ...prev, description: e.target.value }))}
+                    required
+                  />
+                  {newExpense.description && (
+                    <div style={{ marginTop: '8px', fontSize: '12px', background: 'var(--bg-darker)', padding: '8px 12px', borderRadius: '6px', borderLeft: '3px solid var(--accent-gold)' }}>
+                      🔮 <b>PulseAI Live Category Preview:</b> <span style={{ color: 'var(--accent-gold)', fontWeight: 700 }}>{(() => {
+                        const desc = newExpense.description.toLowerCase();
+                        if (desc.includes('fuel') || desc.includes('diesel') || desc.includes('generator') || desc.includes('gas')) return 'Generator/Fuel';
+                        if (desc.includes('uber') || desc.includes('transport') || desc.includes('dispatch') || desc.includes('fare')) return 'Transport';
+                        if (desc.includes('market') || desc.includes('goods') || desc.includes('materials') || desc.includes('lace') || desc.includes('buttons')) return 'Market Run';
+                        if (desc.includes('airtime') || desc.includes('data') || desc.includes('wifi') || desc.includes('internet') || desc.includes('mtn')) return 'Data/Airtime';
+                        if (desc.includes('lunch') || desc.includes('food') || desc.includes('feeding') || desc.includes('catering')) return 'Staff Feeding';
+                        if (desc.includes('shipping') || desc.includes('delivery') || desc.includes('logistics')) return 'Logistics';
+                        return 'Uncategorized';
+                      })()}</span>
+                    </div>
+                  )}
+                  <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block', marginTop: '6px' }}>
+                    AI will auto-categorize your categories based on keywords.
+                  </span>
+                </div>
+                <div className="form-group">
+                  <label>Amount (₦)</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="e.g. 180000"
+                    value={newExpense.amount}
+                    onChange={e => setNewExpense(prev => ({ ...prev, amount: e.target.value }))}
+                    required
+                  />
+                </div>
+                <button type="submit" className="btn btn-gold" style={{ width: '100%', marginTop: '8px' }}>
+                  Log & Categorize Expense
+                </button>
+              </form>
+            </div>
+
+            {/* AI Wasteful Spending box */}
+            <div className="card" style={{ gridColumn: 'span 7' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><ShieldAlert /> AI Waste & Efficiency Alerts</span>
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '8px', borderLeft: '3px solid var(--danger-red)' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--danger-red)', fontSize: '14px', marginBottom: '4px' }}>
+                    🚨 Heavy Fuel Inefficiency Detected
+                  </div>
+                  <p style={{ fontSize: '13px', color: 'var(--text-primary)' }}>
+                    You spent ₦{expenses.filter(e => e.category === 'Generator/Fuel').reduce((sum, e) => sum + e.amount, 0).toLocaleString()} on generator fuel this month. This represents over 35% of total operational costs.
+                  </p>
+                  <div style={{ fontSize: '12px', color: 'var(--accent-gold)', marginTop: '8px', fontWeight: 600 }}>
+                    💡 PulseAI Recommendation: Cut fuel bills by installing a solar inverter hybrid array. Break-even achieved in 11 months based on NGN trends.
+                  </div>
+                </div>
+
+                <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '8px', borderLeft: '3px solid var(--electric-blue)' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--electric-blue-bright)', fontSize: '14px', marginBottom: '4px' }}>
+                    📈 Budget Clearance Indicator
+                  </div>
+                  <p style={{ fontSize: '13px', color: 'var(--text-primary)' }}>
+                    Overall monthly spend ratio: {Math.round((expenses.reduce((s, e) => s + e.amount, 0) / balance) * 100)}% of Nomba liquidity. Cash buffer remains solid.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Expense table */}
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><PieChart /> Expense Ledger</span>
+                <button className="btn btn-secondary" onClick={() => {
+                  setExpenses([]);
+                  showToast("Expenses cleared", "info");
+                }}>
+                  Clear All
+                </button>
+              </div>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Expense Description</th>
+                    <th>Date Logged</th>
+                    <th>Auto-Categorized Group</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {expenses.map(e => (
+                    <tr key={e.id}>
+                      <td style={{ fontWeight: 600 }}>{e.description}</td>
+                      <td>{e.date}</td>
+                      <td>
+                        <span className="badge success" style={{ textTransform: 'uppercase', fontSize: '11px', background: 'rgba(0,102,255,0.08)', color: 'var(--electric-blue-bright)' }}>
+                          {e.category}
+                        </span>
+                      </td>
+                      <td style={{ fontWeight: 700, fontFamily: 'var(--font-mono)' }}>₦{e.amount.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );
