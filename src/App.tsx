@@ -760,6 +760,8 @@ function App() {
 
       {/* Main Content Area */}
       <main className="main-content">
+        
+        {/* VIEW 1: DASHBOARD */}
         {activeTab === 'dashboard' && (
           <div className="dashboard-grid">
             
@@ -942,6 +944,8 @@ function App() {
 
           </div>
         )}
+
+        {/* VIEW 2: SMART PAYMENTS */}
         {activeTab === 'collections' && (
           <div className="dashboard-grid">
             <div className="card" style={{ gridColumn: 'span 7' }}>
@@ -1094,6 +1098,7 @@ function App() {
           </div>
         )}
 
+        {/* VIEW 3: RENT & PROPERTY MANAGER */}
         {activeTab === 'rent' && (
           <div className="dashboard-grid">
             <div className="card" style={{ gridColumn: 'span 12' }}>
@@ -1190,6 +1195,7 @@ function App() {
           </div>
         )}
 
+        {/* VIEW 4: PAYROLL & STAFF */}
         {activeTab === 'payroll' && (
           <div className="dashboard-grid">
             
@@ -1335,6 +1341,7 @@ function App() {
           </div>
         )}
 
+        {/* VIEW 5: INVENTORY INTEL */}
         {activeTab === 'inventory' && (
           <div className="dashboard-grid">
             <div className="card" style={{ gridColumn: 'span 8' }}>
@@ -1413,6 +1420,7 @@ function App() {
           </div>
         )}
 
+        {/* VIEW 6: EXPENSE INTEL */}
         {activeTab === 'expenses' && (
           <div className="dashboard-grid">
             
@@ -1537,6 +1545,7 @@ function App() {
           </div>
         )}
 
+        {/* VIEW 7: AJO & CO-OP */}
         {activeTab === 'ajo' && (
           <div className="dashboard-grid">
             <div className="card" style={{ gridColumn: 'span 12' }}>
@@ -1629,6 +1638,7 @@ function App() {
           </div>
         )}
 
+        {/* VIEW 8: DIASPORA REMITTANCE */}
         {activeTab === 'diaspora' && (
           <div className="dashboard-grid">
             <div className="card" style={{ gridColumn: 'span 5' }}>
@@ -1716,7 +1726,7 @@ function App() {
         )}
 
       </main>
-      </main>
+
       {/* AI Assistant Chat Sidebar */}
       <aside className={`ai-sidebar ${isAiOpen ? 'open' : ''}`}>
         <div className="ai-header">
@@ -1775,6 +1785,7 @@ function App() {
         </div>
       </aside>
 
+      {/* Developer Webhook & Console Simulation Footer */}
       <footer className="dev-console" style={{
         height: isConsoleOpen ? '180px' : '40px',
         padding: isConsoleOpen ? '16px' : '10px 16px',
@@ -1835,11 +1846,249 @@ function App() {
         )}
       </footer>
 
+      {/* Floating Toggle for AI Chat on smaller screens */}
       {!isAiOpen && (
         <button className="ai-chat-floating-toggle" style={{ display: 'flex' }} onClick={() => setIsAiOpen(true)}>
           <MessageSquare size={24} />
         </button>
       )}
+
+      {/* MODAL 1: ADD PROPERTY / TENANT */}
+      {showAddTenantModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Add Tenant & Assign Virtual Account</h3>
+              <button className="modal-close" onClick={() => setShowAddTenantModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleAddTenant}>
+              <div className="form-group">
+                <label>Tenant Full Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. Babajide Benson"
+                  value={newTenant.name}
+                  onChange={e => setNewTenant(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Property Description / Unit</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. Flat 6, Lekki Phase 1"
+                  value={newTenant.property}
+                  onChange={e => setNewTenant(prev => ({ ...prev, property: e.target.value }))}
+                />
+              </div>
+              <div className="form-group">
+                <label>Monthly Rent Amount (₦)</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="e.g. 200000"
+                  value={newTenant.rentAmount}
+                  onChange={e => setNewTenant(prev => ({ ...prev, rentAmount: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Rent Due Date</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={newTenant.dueDate}
+                  onChange={e => setNewTenant(prev => ({ ...prev, dueDate: e.target.value }))}
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone Number</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. +234 802 345 6789"
+                  value={newTenant.phone}
+                  onChange={e => setNewTenant(prev => ({ ...prev, phone: e.target.value }))}
+                />
+              </div>
+
+              <div style={{ marginTop: '16px', fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--bg-darker)', padding: '10px', borderRadius: '4px', marginBottom: '14px' }}>
+                ℹ️ Submitting this form automatically maps a new virtual account at Nomba partner banks (Wema/Providus) for immediate payment webhook listeners.
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                <button type="button" className="btn btn-secondary" onClick={() => setShowAddTenantModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-gold">
+                  Create Profile & Map Virtual Account
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 2: CREATE QUICK PAYMENT LINK */}
+      {showPaymentLinkModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Create Quick Payment Link</h3>
+              <button className="modal-close" onClick={() => setShowPaymentLinkModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            
+            <form onSubmit={e => {
+              e.preventDefault();
+              triggerAiAction("CREATE_PAYMENT_LINK", newLink);
+              setShowPaymentLinkModal(false);
+              setNewLink({ sender: '', amount: '', description: '' });
+            }}>
+              <div className="form-group">
+                <label>Customer Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. Emeka Okoye"
+                  value={newLink.sender}
+                  onChange={e => setNewLink(prev => ({ ...prev, sender: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Invoice Description</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. Branding work - PulseStack Invoice"
+                  value={newLink.description}
+                  onChange={e => setNewLink(prev => ({ ...prev, description: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Invoice Amount (₦)</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="e.g. 250000"
+                  value={newLink.amount}
+                  onChange={e => setNewLink(prev => ({ ...prev, amount: e.target.value }))}
+                  required
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>
+                <button type="button" className="btn btn-secondary" onClick={() => setShowPaymentLinkModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-gold">
+                  Generate Link URL
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 3: VIEW DRAFT NUDGE */}
+      {showNudgeModal && showNudgeModal.open && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Draft AI Payment Nudge ({showNudgeModal.tenantName})</h3>
+              <button className="modal-close" onClick={() => setShowNudgeModal(null)}>
+                <X size={18} />
+              </button>
+            </div>
+            
+            <div className="form-group">
+              <label>AI Generated Reminder Draft (WhatsApp / SMS)</label>
+              <textarea
+                className="form-control"
+                style={{ height: '120px', resize: 'none', lineHeight: '1.4' }}
+                value={showNudgeModal.draft}
+                onChange={e => setShowNudgeModal(prev => prev ? { ...prev, draft: e.target.value } : null)}
+              />
+            </div>
+
+            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '14px' }}>
+              Nudges encourage compliance without damaging customer relations. PulseAI uses friendly local expressions.
+            </p>
+
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <button className="btn btn-secondary" onClick={() => setShowNudgeModal(null)}>
+                Cancel
+              </button>
+              <button className="btn" onClick={() => {
+                showToast(`Nudge successfully sent to ${showNudgeModal.tenantName}!`, 'success');
+                addLog('AI_AGENT', `Nudge message successfully dispatched via Twilio SMS to ${showNudgeModal.tenantName}`);
+                setShowNudgeModal(null);
+              }}>
+                Dispatch Nudge Message
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 4: VIEW DIGITAL PAYSLIP */}
+      {showPayslipModal && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ borderTop: '4px solid var(--electric-blue)' }}>
+            <div className="modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FileText style={{ color: 'var(--electric-blue-bright)' }} />
+                <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Digital Payslip • Nomba Bulk Payout</h3>
+              </div>
+              <button className="modal-close" onClick={() => setShowPayslipModal(null)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '8px', marginBottom: '16px', fontSize: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '8px' }}>
+                <span style={{ color: 'var(--text-muted)' }}>EMPLOYEE NAME</span>
+                <span style={{ fontWeight: 700 }}>{showPayslipModal.name}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '8px' }}>
+                <span style={{ color: 'var(--text-muted)' }}>DEPARTMENT</span>
+                <span style={{ fontWeight: 700 }}>{showPayslipModal.department}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '8px' }}>
+                <span style={{ color: 'var(--text-muted)' }}>BANK DESTINATION</span>
+                <span style={{ fontWeight: 700 }}>{showPayslipModal.bank}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '8px' }}>
+                <span style={{ color: 'var(--text-muted)' }}>ACCOUNT NUMBER</span>
+                <span style={{ fontWeight: 700, fontFamily: 'var(--font-mono)' }}>{showPayslipModal.accountNumber}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '4px' }}>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 700 }}>NET PAYOUT</span>
+                <span style={{ fontWeight: 800, color: 'var(--accent-gold)', fontSize: '14px', fontFamily: 'var(--font-mono)' }}>₦{showPayslipModal.salary.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '16px' }}>
+              Status: <b>PAID VIA NOMBA PAYOUTS</b> • Settlement reference: <code>NMB-PAY-{Math.floor(100000+Math.random()*900000)}</code>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <button className="btn btn-secondary" style={{ width: '100%' }} onClick={() => setShowPayslipModal(null)}>
+                Close Payslip
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
