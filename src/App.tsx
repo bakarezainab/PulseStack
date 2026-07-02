@@ -760,7 +760,188 @@ function App() {
 
       {/* Main Content Area */}
       <main className="main-content">
+        {activeTab === 'dashboard' && (
+          <div className="dashboard-grid">
+            
+            {/* Business Health Score Gauge */}
+            <div className="card" style={{ gridColumn: 'span 4' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Activity /> Business Health Score</span>
+                <span className="badge success">Optimal</span>
+              </div>
+              <div className="gauge-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '140px' }}>
+                <svg width="120" height="70" style={{ transform: 'rotate(0deg)' }}>
+                  {/* Gauge Arc Background */}
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="var(--border-color)" strokeWidth="12" strokeLinecap="round" />
+                  {/* Gauge Arc Colored fill based on health score */}
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="var(--electric-blue)" strokeWidth="12" strokeLinecap="round"
+                    strokeDasharray="157" strokeDashoffset={157 - (157 * businessHealth.score / 100)} />
+                </svg>
+                <div style={{ fontSize: '32px', fontWeight: 800, marginTop: '-30px', color: 'var(--text-primary)' }}>{businessHealth.score}</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 700 }}>Pulse Score</div>
+              </div>
 
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '16px', fontSize: '12px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '6px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Cash Flow</div>
+                  <div style={{ fontWeight: 700, color: 'var(--success-green)' }}>{businessHealth.cashFlowScore}%</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '6px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Expenses</div>
+                  <div style={{ fontWeight: 700, color: businessHealth.expenseControlScore > 50 ? 'var(--success-green)' : 'var(--danger-red)' }}>{businessHealth.expenseControlScore}%</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '6px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Consistency</div>
+                  <div style={{ fontWeight: 700, color: 'var(--success-green)' }}>{businessHealth.paymentConsistencyScore}%</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '6px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Growth</div>
+                  <div style={{ fontWeight: 700, color: 'var(--electric-blue-bright)' }}>{businessHealth.revenueGrowthScore}%</div>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Action Points Panel */}
+            <div className="card" style={{ gridColumn: 'span 8' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><MessageSquare /> PulseAI Strategic Actions</span>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Updated Live</span>
+              </div>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {businessHealth.actionPoints.map((point, index) => (
+                  <li key={index} style={{ padding: '12px 14px', borderRadius: '8px', background: 'var(--bg-darker)', display: 'flex', gap: '12px', fontSize: '13px', borderLeft: `3px solid ${index === 1 ? 'var(--accent-gold)' : 'var(--electric-blue)'}` }}>
+                    <div style={{ color: 'var(--electric-blue-bright)', fontWeight: 700 }}>0{index + 1}</div>
+                    <div style={{ color: 'var(--text-primary)' }}>{point}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Live Pulse Heartbeat Graph */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Activity /> Real-Time Transaction Pulse</span>
+                <span className="badge" style={{ color: 'var(--success-green)', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--success-green)', display: 'inline-block' }}></span>
+                  Live Monitor
+                </span>
+              </div>
+              <div style={{ height: '150px', background: 'var(--bg-darker)', borderRadius: '8px', padding: '10px', display: 'flex', alignItems: 'center' }}>
+                <svg viewBox="0 0 400 100" style={{ width: '100%', height: '100%' }}>
+                  <path
+                    d={`M ${pulseData.map((v, i) => `${(i / (pulseData.length - 1)) * 400},${100 - v}`).join(' L ')}`}
+                    fill="none"
+                    stroke="var(--electric-blue)"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d={`M 0,100 L ${pulseData.map((v, i) => `${(i / (pulseData.length - 1)) * 400},${100 - v}`).join(' L ')} L 400,100 Z`}
+                    fill="url(#pulseGrad)"
+                    opacity="0.1"
+                  />
+                  <defs>
+                    <linearGradient id="pulseGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--electric-blue)" />
+                      <stop offset="100%" stopColor="transparent" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)' }}>
+                <span>Past 60 Seconds</span>
+                <span>Active API Channels: Payment Links, Virtual Accounts, QR</span>
+              </div>
+            </div>
+
+            {/* Revenue Forecasting Graph */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><TrendingUp /> Revenue Forecasting (30-Day Outlook)</span>
+                <span className="badge" style={{ color: 'var(--accent-gold)', background: 'var(--accent-gold-glow)' }}>Seasonal AI Layer</span>
+              </div>
+              <div style={{ height: '150px', background: 'var(--bg-darker)', borderRadius: '8px', padding: '10px', display: 'flex', alignItems: 'center', position: 'relative' }}>
+                <svg viewBox="0 0 400 100" style={{ width: '100%', height: '100%' }}>
+                  {/* Past Trend */}
+                  <path d="M 0,70 L 100,65 L 200,55 L 260,48" fill="none" stroke="var(--text-muted)" strokeWidth="2.5" />
+                  
+                  {/* Future Forecast */}
+                  <path d="M 260,48 L 300,38 L 340,30 L 370,42 L 400,35" fill="none" stroke="var(--electric-blue)" strokeWidth="2.5" strokeDasharray="4" />
+                  
+                  {/* Confidence Interval Polygon */}
+                  <polygon points="260,48 300,28 340,15 370,30 400,20 400,50 370,55 340,45 300,48 260,48" fill="var(--electric-blue-glow)" opacity="0.3" />
+                  
+                  {/* Annotations */}
+                  <text x="250" y="25" fill="var(--accent-gold)" fontSize="8" fontWeight="bold">Sallah Cycle Prediction</text>
+                  <line x1="260" y1="48" x2="260" y2="90" stroke="var(--border-color)" strokeWidth="1" strokeDasharray="2" />
+                  <text x="265" y="85" fill="var(--text-muted)" fontSize="8">Today</text>
+                </svg>
+              </div>
+              <div style={{ marginTop: '10px', fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyItems: 'space-between', width: '100%' }}>
+                <span>Forecast: ₦1.8M - ₦2.4M (High Confidence). Sallah / Ramadan festival cycles will boost textile sales by 35% in mid-August.</span>
+              </div>
+            </div>
+
+            {/* Recent Payments Feed */}
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><CreditCard /> Consolidated Live Nomba Settlements</span>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    placeholder="Search by sender or TXID..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="form-control"
+                    style={{ width: '220px', padding: '6px 12px', fontSize: '12px' }}
+                  />
+                  <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Settled Instantly T+1</span>
+                </div>
+              </div>
+              <div style={{ overflowX: 'auto' }}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>TXID</th>
+                      <th>Sender/Recipient</th>
+                      <th>Category/Type</th>
+                      <th>Payment Channel</th>
+                      <th>Timestamp</th>
+                      <th>Status</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions
+                      .filter(t => 
+                        t.sender.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        t.id.toLowerCase().includes(searchQuery.toLowerCase())
+                      )
+                      .map(t => (
+                        <tr key={t.id}>
+                          <td style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>{t.id}</td>
+                          <td style={{ fontWeight: 600 }}>{t.sender}</td>
+                          <td style={{ textTransform: 'capitalize' }}>{t.type.replace('_', ' ')}</td>
+                          <td>{t.paymentChannel}</td>
+                          <td>{new Date(t.date).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</td>
+                          <td>
+                            <span className={`badge ${t.status}`}>
+                              {t.status}
+                            </span>
+                          </td>
+                          <td style={{ fontWeight: 800, color: t.type === 'payout' ? 'var(--danger-red)' : 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                            {t.type === 'payout' ? '-' : ''}₦{t.amount.toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        )}
       </main>
     </div>
   );
