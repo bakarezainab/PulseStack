@@ -1717,6 +1717,69 @@ function App() {
 
       </main>
       </main>
+      {/* AI Assistant Chat Sidebar */}
+      <aside className={`ai-sidebar ${isAiOpen ? 'open' : ''}`}>
+        <div className="ai-header">
+          <div className="ai-header-title">
+            <MessageSquare size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+            <span style={{ fontWeight: 700 }}>PulseAI Assistant</span>
+            <div className="ai-status-indicator" />
+          </div>
+          <button className="modal-close" onClick={() => setIsAiOpen(false)}>
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="ai-messages">
+          {chatMessages.map((msg, idx) => (
+            <div key={idx} className={`ai-message ${msg.sender}`}>
+              <div style={{ fontSize: '13px' }}>{msg.text}</div>
+              <div style={{ fontSize: '9px', textAlign: 'right', marginTop: '4px', opacity: 0.6 }}>{msg.time}</div>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <div className="ai-quick-prompts">
+          <button className="prompt-btn" onClick={() => handleChatSend("Who never pay rent?")}>
+            Who never pay rent?
+          </button>
+          <button className="prompt-btn" onClick={() => handleChatSend("Pay staff salaries now")}>
+            Pay staff salaries
+          </button>
+          <button className="prompt-btn" onClick={() => handleChatSend("How much did I spend on fuel?")}>
+            Fuel spending check
+          </button>
+          <button className="prompt-btn" onClick={() => handleChatSend("Generate invoice for Emeka - 250000")}>
+            Invoice Emeka N250k
+          </button>
+          <button className="prompt-btn" onClick={() => handleChatSend("What is my business health score?")}>
+            Check health score
+          </button>
+        </div>
+
+        <div className="ai-input-container">
+          <input
+            type="text"
+            className="ai-input"
+            placeholder="Type command in Pidgin or English..."
+            value={chatInput}
+            onChange={e => setChatInput(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') handleChatSend();
+            }}
+          />
+          <button className="ai-send-btn" onClick={() => handleChatSend()}>
+            <Send size={16} />
+          </button>
+        </div>
+      </aside>
+
+      {!isAiOpen && (
+        <button className="ai-chat-floating-toggle" style={{ display: 'flex' }} onClick={() => setIsAiOpen(true)}>
+          <MessageSquare size={24} />
+        </button>
+      )}
     </div>
   );
 }
