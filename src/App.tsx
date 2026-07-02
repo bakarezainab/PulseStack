@@ -1629,6 +1629,93 @@ function App() {
           </div>
         )}
 
+        {activeTab === 'diaspora' && (
+          <div className="dashboard-grid">
+            <div className="card" style={{ gridColumn: 'span 5' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Globe /> Send USDT/USDC from Abroad</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                Diaspora sponsors can send crypto which instantly routes via NOWPayments, converts at live parallel rates, and delivers as Naira via Nomba payouts.
+              </p>
+
+              <form onSubmit={handleRemittanceSubmit}>
+                <div className="form-group">
+                  <label>Sender Name (e.g. UK/US Family Member)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Chidi Obi"
+                    value={cryptoForm.sender}
+                    onChange={e => setCryptoForm(prev => ({ ...prev, sender: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>USDT/USDC Amount ($)</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={cryptoForm.amountUsd}
+                    onChange={e => setCryptoForm(prev => ({ ...prev, amountUsd: e.target.value }))}
+                    required
+                  />
+                  <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                    Equivalent: <b>₦{(Number(cryptoForm.amountUsd) * 1550).toLocaleString()} NGN</b>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>Nomba Recipient Account Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={cryptoForm.recipientAccount}
+                    onChange={e => setCryptoForm(prev => ({ ...prev, recipientAccount: e.target.value }))}
+                    required
+                  />
+                </div>
+                
+                <button type="submit" className="btn btn-gold" style={{ width: '100%', marginTop: '10px' }}>
+                  Simulate Crypto Remittance
+                </button>
+              </form>
+            </div>
+
+            <div className="card" style={{ gridColumn: 'span 7' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><TrendingUp /> Rate Trends & Remittance AI Intelligence</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
+                AI analyzes volatility indices across Binance P2P and Nigerian Central Bank APIs to advice on conversion optimization.
+              </p>
+
+              <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '10px', borderLeft: '3px solid var(--electric-blue)', marginBottom: '16px' }}>
+                <div style={{ fontWeight: 700, color: 'var(--electric-blue-bright)', fontSize: '14px', marginBottom: '4px' }}>
+                  💡 PulseAI Remittance Advisory
+                </div>
+                <p style={{ fontSize: '13px', color: 'var(--text-primary)' }}>
+                  Parallel rates are sitting at <b>₦1,550/$</b>. Rate charts display key resistance at ₦1,565. The market is projected to pull back slightly by 1.2% tomorrow due to capital inflows. 
+                </p>
+                <div style={{ marginTop: '10px', fontWeight: 600, color: 'var(--accent-gold)' }}>
+                  Recommendation: SELL dollars today. Initiating remittance now increases Naira yield relative to weekend settlements.
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '12px' }}>
+                <div style={{ border: '1px solid var(--border-color)', padding: '10px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Nomba FX Settler</div>
+                  <div style={{ fontWeight: 700, color: 'var(--success-green)' }}>ACTIVE</div>
+                </div>
+                <div style={{ border: '1px solid var(--border-color)', padding: '10px', borderRadius: '6px' }}>
+                  <div style={{ color: 'var(--text-muted)' }}>Liquidity Route</div>
+                  <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>NOWPayments API</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </main>
       </main>
     </div>
   );
