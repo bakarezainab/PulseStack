@@ -1001,55 +1001,57 @@ function App() {
               <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
                 Generate immediate Nomba checkout links to accept cards, bank transfers, and mobile money.
               </p>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Customer</th>
-                    <th>Description</th>
-                    <th>Link URL</th>
-                    <th>Status</th>
-                    <th>Amount</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.filter(t => t.type === 'payment_link').map(t => (
-                    <tr key={t.id}>
-                      <td style={{ fontWeight: 600 }}>{t.sender}</td>
-                      <td>{t.description}</td>
-                      <td>
-                        <code style={{ fontSize: '11px', color: 'var(--electric-blue-bright)' }}>
-                          https://pay.nomba.com/l/{t.id.toLowerCase()}
-                        </code>
-                      </td>
-                      <td>
-                        <span className={`badge ${t.status}`}>{t.status}</span>
-                      </td>
-                      <td style={{ fontWeight: 700 }}>₦{t.amount.toLocaleString()}</td>
-                      <td>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => {
-                            navigator.clipboard.writeText(`https://pay.nomba.com/l/${t.id.toLowerCase()}`);
-                            showToast("Payment link copied to clipboard!", "success");
-                          }}>
-                            Copy
-                          </button>
-                          {t.status === 'pending' && (
-                            <button className="btn btn-gold" style={{ padding: '4px 8px', fontSize: '11px', color: 'var(--bg-darkest)' }} onClick={() => {
-                              setTransactions(prev => prev.map(item => item.id === t.id ? { ...item, status: 'success' } : item));
-                              setBalance(prev => prev + t.amount);
-                              addLog('WEBHOOK', `[NOMBA WEBHOOK] payment.link.paid | TXID: ${t.id} | Amount: ₦${t.amount.toLocaleString()} | Customer: ${t.sender} settled.`);
-                              showToast(`Webhook simulated: ₦${t.amount.toLocaleString()} received from ${t.sender}!`, 'success');
-                            }}>
-                              Settle
-                            </button>
-                          )}
-                        </div>
-                      </td>
+              <div className="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Customer</th>
+                      <th>Description</th>
+                      <th>Link URL</th>
+                      <th>Status</th>
+                      <th>Amount</th>
+                      <th>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {transactions.filter(t => t.type === 'payment_link').map(t => (
+                      <tr key={t.id}>
+                        <td style={{ fontWeight: 600 }}>{t.sender}</td>
+                        <td>{t.description}</td>
+                        <td>
+                          <code style={{ fontSize: '11px', color: 'var(--electric-blue-bright)' }}>
+                            https://pay.nomba.com/l/{t.id.toLowerCase()}
+                          </code>
+                        </td>
+                        <td>
+                          <span className={`badge ${t.status}`}>{t.status}</span>
+                        </td>
+                        <td style={{ fontWeight: 700 }}>₦{t.amount.toLocaleString()}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => {
+                              navigator.clipboard.writeText(`https://pay.nomba.com/l/${t.id.toLowerCase()}`);
+                              showToast("Payment link copied to clipboard!", "success");
+                            }}>
+                              Copy
+                            </button>
+                            {t.status === 'pending' && (
+                              <button className="btn btn-gold" style={{ padding: '4px 8px', fontSize: '11px', color: 'var(--bg-darkest)' }} onClick={() => {
+                                setTransactions(prev => prev.map(item => item.id === t.id ? { ...item, status: 'success' } : item));
+                                setBalance(prev => prev + t.amount);
+                                addLog('WEBHOOK', `[NOMBA WEBHOOK] payment.link.paid | TXID: ${t.id} | Amount: ₦${t.amount.toLocaleString()} | Customer: ${t.sender} settled.`);
+                                showToast(`Webhook simulated: ₦${t.amount.toLocaleString()} received from ${t.sender}!`, 'success');
+                              }}>
+                                Settle
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div className="card" style={{ gridColumn: 'span 5' }}>
@@ -1152,55 +1154,57 @@ function App() {
                 </button>
               </div>
 
-              <table>
-                <thead>
-                  <tr>
-                    <th>Tenant</th>
-                    <th>Property Assigned</th>
-                    <th>Monthly Rent</th>
-                    <th>Due Date</th>
-                    <th>AI Default Risk</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tenants.map(t => (
-                    <tr key={t.id}>
-                      <td style={{ fontWeight: 700 }}>{t.name}</td>
-                      <td>{t.property}</td>
-                      <td style={{ fontFamily: 'var(--font-mono)' }}>₦{t.rentAmount.toLocaleString()}</td>
-                      <td>{t.dueDate}</td>
-                      <td>
-                        <span className={`badge ${t.riskScore}`}>
-                          {t.riskScore} Risk
-                        </span>
-                        <div style={{ fontSize: '10px', color: 'var(--text-secondary)', marginTop: '2px', maxWidth: '280px' }}>
-                          {t.riskAnalysis}
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`badge ${t.status}`}>{t.status}</span>
-                      </td>
-                      <td>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          {t.status !== 'paid' && (
-                            <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => triggerRentNudge(t)}>
-                              Draft Nudge
-                            </button>
-                          )}
-                          <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => {
-                            showToast(`Rent Webhook Simulated for ${t.name}`, 'info');
-                            simulatePaymentWebhook('rent');
-                          }}>
-                            Simulate Webhook Pay
-                          </button>
-                        </div>
-                      </td>
+              <div className="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tenant</th>
+                      <th>Property Assigned</th>
+                      <th>Monthly Rent</th>
+                      <th>Due Date</th>
+                      <th>AI Default Risk</th>
+                      <th>Status</th>
+                      <th>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {tenants.map(t => (
+                      <tr key={t.id}>
+                        <td style={{ fontWeight: 700 }}>{t.name}</td>
+                        <td>{t.property}</td>
+                        <td style={{ fontFamily: 'var(--font-mono)' }}>₦{t.rentAmount.toLocaleString()}</td>
+                        <td>{t.dueDate}</td>
+                        <td>
+                          <span className={`badge ${t.riskScore}`}>
+                            {t.riskScore} Risk
+                          </span>
+                          <div style={{ fontSize: '10px', color: 'var(--text-secondary)', marginTop: '2px', maxWidth: '280px' }}>
+                            {t.riskAnalysis}
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`badge ${t.status}`}>{t.status}</span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            {t.status !== 'paid' && (
+                              <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => triggerRentNudge(t)}>
+                                Draft Nudge
+                              </button>
+                            )}
+                            <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => {
+                              showToast(`Rent Webhook Simulated for ${t.name}`, 'info');
+                              simulatePaymentWebhook('rent');
+                            }}>
+                              Simulate Webhook Pay
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div className="card" style={{ gridColumn: 'span 6' }}>
