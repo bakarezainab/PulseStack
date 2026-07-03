@@ -429,10 +429,48 @@ function App() {
   // Health Score Calculations
   const businessHealth = getBusinessHealth(expenses, transactions, tenants);
 
-  // Auto-Draft Rent Nudge generator
+  // Auto-Draft Rent Nudge generator — supports pidgin, formal, and urgent tones
+  const generateNudgeText = (
+    tenant: { name: string; property: string; rentAmount: number; dueDate: string; id: string; isAjo?: boolean },
+    tone: 'pidgin' | 'formal' | 'urgent'
+  ) => {
+    const amountStr = tenant.rentAmount.toLocaleString();
+    if (tenant.isAjo) {
+      if (tone === 'pidgin')  return `Hello ${tenant.name}, Ajo cooperative contributions are active. Your payment of ₦${amountStr} is due. Abeg, click this Nomba link to clear: pay.nomba.com/ajo/${tenant.id.toLowerCase()}`;
+      if (tone === 'formal')  return `Dear ${tenant.name}, this is a reminder that your Ajo cooperative contribution of ₦${amountStr} is currently pending. Please click the link to complete payment: pay.nomba.com/ajo/${tenant.id.toLowerCase()}. Thank you.`;
+      return `URGENT: Ajo cooperative payment of ₦${amountStr} from ${tenant.name} is due immediately. Please click pay.nomba.com/ajo/${tenant.id.toLowerCase()} to complete payment and keep the circle active.`;
+    }
+    if (tone === 'pidgin')  return `Hello ${tenant.name}, this is a gentle reminder from Z-Pulse Fashion House. Rent for ${tenant.property} (₦${amountStr}) was due on ${tenant.dueDate}. Abeg, make you clear this invoice so we can reconcile our Nomba accounts. Thank you!`;
+    if (tone === 'formal')  return `Dear ${tenant.name}, this is a formal notification from Z-Pulse Fashion House regarding the rent invoice for ${tenant.property} in the amount of ₦${amountStr}, which was due on ${tenant.dueDate}. Please click the link to complete payment: pay.nomba.com/l/${tenant.id.toLowerCase()}. Thank you.`;
+    return `URGENT: Rent payment of ₦${amountStr} for ${tenant.property} is overdue since ${tenant.dueDate}. Z-Pulse Fashion House requires immediate settlement. Please click pay.nomba.com/l/${tenant.id.toLowerCase()} to complete payment immediately.`;
+  };
+
   const triggerRentNudge = (tenant: Tenant) => {
-    const draft = `Hello ${tenant.name}, this is a gentle reminder from Z-Pulse Fashion House. Rent for ${tenant.property} (₦${tenant.rentAmount.toLocaleString()}) was due on ${tenant.dueDate}. Abeg, make you clear this invoice so we can reconcile our Nomba accounts. Thank you!`;
-    setShowNudgeModal({ open: true, tenantName: tenant.name, draft });
+    const tenantObj = { name: tenant.name, property: tenant.property, rentAmount: tenant.rentAmount, dueDate: tenant.dueDate, id: tenant.id };
+    const draft = generateNudgeText(tenantObj, 'pidgin');
+    setShowNudgeModal({ open: true, tenant: tenantObj, tone: 'pidgin', draft });
+  };
+
+  // Ajo Pool beneficiary payout via Nomba Bulk Payout API
+  const handleAjoPayout = (poolId: string) => {
+    const pool = ajoPools.find(p => p.id === poolId);
+    if (!pool) return;
+    addLog('NOMBA_API', `Bulk Payout API invoked: Disbursing Ajo Pool "${pool.name}" beneficiary funds...`);
+    setTimeout(() => {
+      setAjoPools(prev => prev.map(p => p.id === poolId ? { ...p, status: 'completed' } : p));
+      setBalance(b => b - pool.targetAmount);
+      const timestamp = new Date().toISOString();
+      setTransactions(prev => [{
+        id: `TX-AJO-PAY-${Math.floor(1000 + Math.random() * 9000)}`,
+        amount: pool.targetAmount, type: 'payout', status: 'success',
+        sender: 'Balogun Market Association', recipient: pool.recipient, date: timestamp,
+        description: `Ajo Pool Disbursal - Cycle Beneficiary: ${pool.recipient}`,
+        paymentChannel: 'Nomba Payout API'
+      }, ...prev]);
+      addLog('NOMBA_API', `Ajo Pool disburse success: ₦${pool.targetAmount.toLocaleString()} paid to ${pool.recipient}.`);
+      addLog('AI_AGENT', `Ajo cycle closed. Automated payout registered for ${pool.recipient}.`);
+      showToast(`Ajo Pool Disbursed: ₦${pool.targetAmount.toLocaleString()} sent to ${pool.recipient}!`, 'success');
+    }, 1000);
   };
 
   if (viewMode === 'landing') {
