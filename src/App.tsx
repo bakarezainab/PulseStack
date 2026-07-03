@@ -429,20 +429,29 @@ function App() {
   // Health Score Calculations
   const businessHealth = getBusinessHealth(expenses, transactions, tenants);
 
-  // Auto-Draft Rent Nudge generator — supports pidgin, formal, and urgent tones
+  // Auto-Draft Rent Nudge generator
   const generateNudgeText = (
     tenant: { name: string; property: string; rentAmount: number; dueDate: string; id: string; isAjo?: boolean },
     tone: 'pidgin' | 'formal' | 'urgent'
   ) => {
     const amountStr = tenant.rentAmount.toLocaleString();
     if (tenant.isAjo) {
-      if (tone === 'pidgin')  return `Hello ${tenant.name}, Ajo cooperative contributions are active. Your payment of ₦${amountStr} is due. Abeg, click this Nomba link to clear: pay.nomba.com/ajo/${tenant.id.toLowerCase()}`;
-      if (tone === 'formal')  return `Dear ${tenant.name}, this is a reminder that your Ajo cooperative contribution of ₦${amountStr} is currently pending. Please click the link to complete payment: pay.nomba.com/ajo/${tenant.id.toLowerCase()}. Thank you.`;
-      return `URGENT: Ajo cooperative payment of ₦${amountStr} from ${tenant.name} is due immediately. Please click pay.nomba.com/ajo/${tenant.id.toLowerCase()} to complete payment and keep the circle active.`;
+      if (tone === 'pidgin') {
+        return `Hello ${tenant.name}, Ajo cooperative contributions are active. Your payment of ₦${amountStr} is due. Abeg, click this Nomba link to clear: pay.nomba.com/ajo/${tenant.id.toLowerCase()}`;
+      } else if (tone === 'formal') {
+        return `Dear ${tenant.name}, this is a reminder that your Ajo cooperative contribution of ₦${amountStr} is currently pending. Please click the link to complete payment: pay.nomba.com/ajo/${tenant.id.toLowerCase()}. Thank you.`;
+      } else {
+        return `URGENT: Ajo cooperative payment of ₦${amountStr} from ${tenant.name} is due immediately. Please click pay.nomba.com/ajo/${tenant.id.toLowerCase()} to complete payment and keep the circle active.`;
+      }
+    } else {
+      if (tone === 'pidgin') {
+        return `Hello ${tenant.name}, this is a gentle reminder from Z-Pulse Fashion House. Rent for ${tenant.property} (₦${amountStr}) was due on ${tenant.dueDate}. Abeg, make you clear this invoice so we can reconcile our Nomba accounts. Thank you!`;
+      } else if (tone === 'formal') {
+        return `Dear ${tenant.name}, this is a formal notification from Z-Pulse Fashion House regarding the rent invoice for ${tenant.property} in the amount of ₦${amountStr}, which was due on ${tenant.dueDate}. Please click the link to complete payment: pay.nomba.com/l/${tenant.id.toLowerCase()}. Thank you.`;
+      } else {
+        return `URGENT: Rent payment of ₦${amountStr} for ${tenant.property} is overdue since ${tenant.dueDate}. Z-Pulse Fashion House requires immediate settlement. Please click pay.nomba.com/l/${tenant.id.toLowerCase()} to complete payment immediately.`;
+      }
     }
-    if (tone === 'pidgin')  return `Hello ${tenant.name}, this is a gentle reminder from Z-Pulse Fashion House. Rent for ${tenant.property} (₦${amountStr}) was due on ${tenant.dueDate}. Abeg, make you clear this invoice so we can reconcile our Nomba accounts. Thank you!`;
-    if (tone === 'formal')  return `Dear ${tenant.name}, this is a formal notification from Z-Pulse Fashion House regarding the rent invoice for ${tenant.property} in the amount of ₦${amountStr}, which was due on ${tenant.dueDate}. Please click the link to complete payment: pay.nomba.com/l/${tenant.id.toLowerCase()}. Thank you.`;
-    return `URGENT: Rent payment of ₦${amountStr} for ${tenant.property} is overdue since ${tenant.dueDate}. Z-Pulse Fashion House requires immediate settlement. Please click pay.nomba.com/l/${tenant.id.toLowerCase()} to complete payment immediately.`;
   };
 
   const triggerRentNudge = (tenant: Tenant) => {
@@ -451,22 +460,29 @@ function App() {
     setShowNudgeModal({ open: true, tenant: tenantObj, tone: 'pidgin', draft });
   };
 
-  // Ajo Pool beneficiary payout via Nomba Bulk Payout API
   const handleAjoPayout = (poolId: string) => {
     const pool = ajoPools.find(p => p.id === poolId);
     if (!pool) return;
+    
     addLog('NOMBA_API', `Bulk Payout API invoked: Disbursing Ajo Pool "${pool.name}" beneficiary funds...`);
+    
     setTimeout(() => {
       setAjoPools(prev => prev.map(p => p.id === poolId ? { ...p, status: 'completed' } : p));
       setBalance(b => b - pool.targetAmount);
+      
       const timestamp = new Date().toISOString();
       setTransactions(prev => [{
         id: `TX-AJO-PAY-${Math.floor(1000 + Math.random() * 9000)}`,
-        amount: pool.targetAmount, type: 'payout', status: 'success',
-        sender: 'Balogun Market Association', recipient: pool.recipient, date: timestamp,
+        amount: pool.targetAmount,
+        type: 'payout',
+        status: 'success',
+        sender: "Balogun Market Association",
+        recipient: pool.recipient,
+        date: timestamp,
         description: `Ajo Pool Disbursal - Cycle Beneficiary: ${pool.recipient}`,
-        paymentChannel: 'Nomba Payout API'
+        paymentChannel: "Nomba Payout API"
       }, ...prev]);
+      
       addLog('NOMBA_API', `Ajo Pool disburse success: ₦${pool.targetAmount.toLocaleString()} paid to ${pool.recipient}.`);
       addLog('AI_AGENT', `Ajo cycle closed. Automated payout registered for ${pool.recipient}.`);
       showToast(`Ajo Pool Disbursed: ₦${pool.targetAmount.toLocaleString()} sent to ${pool.recipient}!`, 'success');
@@ -1175,7 +1191,12 @@ function App() {
                         <td style={{ fontFamily: 'var(--font-mono)' }}>₦{t.rentAmount.toLocaleString()}</td>
                         <td>{t.dueDate}</td>
                         <td>
-                          <span className={`badge ${t.riskScore}`}>
+                          <span
+                            className={`badge ${t.riskScore}`}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => setActiveRiskTenant(t)}
+                            title="Click to view AI Risk Profile"
+                          >
                             {t.riskScore} Risk
                           </span>
                           <div style={{ fontSize: '10px', color: 'var(--text-secondary)', marginTop: '2px', maxWidth: '280px' }}>
@@ -1631,7 +1652,7 @@ function App() {
                   </div>
 
                   {/* Members contribution table */}
-                  <div style={{ overflowX: 'auto' }}>
+                  <div className="table-wrapper">
                     <table style={{ margin: 0 }}>
                       <thead>
                         <tr>
@@ -1664,8 +1685,9 @@ function App() {
                               <div style={{ display: 'flex', gap: '8px' }}>
                                 {!m.paid && (
                                   <button className="btn btn-secondary" style={{ padding: '2px 8px', fontSize: '11px' }} onClick={() => {
-                                    const nudgeDraft = `Hello ${m.name}, Ajo cooperative contributions are active. Your payment of ₦${m.amount.toLocaleString()} is due. Please click this Nomba link to clear: pay.nomba.com/ajo/${pool.id}`;
-                                    setShowNudgeModal({ open: true, tenantName: m.name, draft: nudgeDraft });
+                                    const memberObj = { name: m.name, property: pool.name, rentAmount: m.amount, dueDate: 'Today', id: pool.id, isAjo: true };
+                                    const nudgeDraft = generateNudgeText(memberObj, 'pidgin');
+                                    setShowNudgeModal({ open: true, tenant: memberObj, tone: 'pidgin', draft: nudgeDraft });
                                   }}>
                                     Nudge Member
                                   </button>
@@ -1685,6 +1707,29 @@ function App() {
                       </tbody>
                     </table>
                   </div>
+
+                  {pool.currentContribution >= pool.targetAmount && pool.status === 'active' && (
+                    <div style={{ background: 'rgba(255, 184, 0, 0.05)', border: '1px solid var(--accent-gold)', borderRadius: '8px', padding: '16px', marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                      <div>
+                        <div style={{ fontWeight: 700, color: 'var(--accent-gold)' }}>🎉 Ajo Pool Fully Funded! (100% Capacity)</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                          All members have contributed. Total ₦{pool.currentContribution.toLocaleString()} is ready to be disbursed to <b>{pool.recipient}</b>.
+                        </div>
+                      </div>
+                      <button className="btn btn-gold" onClick={() => handleAjoPayout(pool.id)}>
+                        Payout Beneficiary Now
+                      </button>
+                    </div>
+                  )}
+
+                  {pool.status === 'completed' && (
+                    <div style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid var(--success-green)', borderRadius: '8px', padding: '12px 16px', marginTop: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span style={{ color: 'var(--success-green)', fontWeight: 'bold' }}>✓</span>
+                      <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        Ajo cycle completed! ₦{pool.targetAmount.toLocaleString()} has been paid out to <b>{pool.recipient}</b> via Nomba Bulk Payout Rails.
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -1749,7 +1794,7 @@ function App() {
                 <span className="card-title"><TrendingUp /> Rate Trends & Remittance AI Intelligence</span>
               </div>
               <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
-                AI analyzes volatility indices across Binance P2P and Nigerian Central Bank APIs to advice on conversion optimization.
+                AI analyzes volatility indices across Binance P2P and Nigerian Central Bank APIs to advise on conversion optimization.
               </p>
 
               <div style={{ background: 'var(--bg-darker)', padding: '16px', borderRadius: '10px', borderLeft: '3px solid var(--electric-blue)', marginBottom: '16px' }}>
@@ -1764,7 +1809,7 @@ function App() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '12px', marginBottom: '20px' }}>
                 <div style={{ border: '1px solid var(--border-color)', padding: '10px', borderRadius: '6px' }}>
                   <div style={{ color: 'var(--text-muted)' }}>Nomba FX Settler</div>
                   <div style={{ fontWeight: 700, color: 'var(--success-green)' }}>ACTIVE</div>
@@ -1774,6 +1819,50 @@ function App() {
                   <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>NOWPayments API</div>
                 </div>
               </div>
+
+              {/* Corridor Fee & Yield Comparison */}
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>
+                  Corridor Comparison Widget ($500 Remittance Value)
+                </div>
+                <div className="table-wrapper">
+                  <table style={{ margin: 0 }}>
+                    <thead>
+                      <tr>
+                        <th>Remittance Method</th>
+                        <th>FX Spread / Fees</th>
+                        <th>Settlement speed</th>
+                        <th>Recipient gets (Naira)</th>
+                        <th>Efficiency</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style={{ fontWeight: 600 }}>Traditional Bank Wire</td>
+                        <td>$35 fee + 12% spread</td>
+                        <td>3 - 5 Business Days</td>
+                        <td>₦682,000</td>
+                        <td><span className="badge flagged">Low (81%)</span></td>
+                      </tr>
+                      <tr>
+                        <td style={{ fontWeight: 600 }}>Standard Agent (WU/Ria)</td>
+                        <td>$12 fee + 7% spread</td>
+                        <td>1 - 2 Business Days</td>
+                        <td>₦720,750</td>
+                        <td><span className="badge pending">Med (92%)</span></td>
+                      </tr>
+                      <tr style={{ background: 'var(--electric-blue-glow)' }}>
+                        <td style={{ fontWeight: 800, color: 'var(--accent-gold)' }}>PulseStack (Nomba)</td>
+                        <td>$0 fee + 0.4% spread</td>
+                        <td><b>0.8 seconds (Instant)</b></td>
+                        <td style={{ fontWeight: 800, color: 'var(--accent-gold)' }}>₦771,900</td>
+                        <td><span className="badge success" style={{ background: 'var(--success-green)', color: 'var(--bg-darkest)' }}>MAX (99.6%)</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
             </div>
           </div>
         )}
@@ -1884,16 +1973,43 @@ function App() {
             </div>
 
             <div className="console-logs">
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-color)', paddingBottom: '4px', marginBottom: '4px' }}>
-                Unified Webhook Routing Terminal Logs (Zero Manual Refresh Required)
-              </div>
-              {webhooksLogs.map(log => (
-                <div key={log.id} className="log-entry">
-                  <span className="log-timestamp">[{log.timestamp}]</span>
-                  <span className="log-tag">[{log.tag}]</span>
-                  <span className="log-message">{log.message}</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px', marginBottom: '6px', flexWrap: 'wrap', gap: '8px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  Unified Webhook Routing Terminal Logs
+                </span>
+                <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', maxWidth: '100%' }}>
+                  {(['ALL', 'NOMBA_API', 'AI_AGENT', 'WEBHOOK', 'CRYPTO_SETTLE'] as const).map(tag => (
+                    <button
+                      key={tag}
+                      type="button"
+                      className="prompt-btn"
+                      style={{
+                        fontSize: '9px',
+                        padding: '2px 6px',
+                        height: '18px',
+                        borderRadius: '3px',
+                        background: activeLogFilter === tag ? 'var(--electric-blue-glow)' : 'var(--bg-card)',
+                        borderColor: activeLogFilter === tag ? 'var(--electric-blue-bright)' : 'var(--border-color)',
+                        color: activeLogFilter === tag ? 'var(--text-primary)' : 'var(--text-muted)'
+                      }}
+                      onClick={() => setActiveLogFilter(tag)}
+                    >
+                      {tag.replace('_', ' ')}
+                    </button>
+                  ))}
                 </div>
-              ))}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', overflowY: 'auto', flexGrow: 1 }}>
+                {webhooksLogs
+                  .filter(log => activeLogFilter === 'ALL' || log.tag === activeLogFilter)
+                  .map(log => (
+                    <div key={log.id} className="log-entry">
+                      <span className="log-timestamp">[{log.timestamp}]</span>
+                      <span className="log-tag">[{log.tag}]</span>
+                      <span className="log-message">{log.message}</span>
+                    </div>
+                  ))}
+              </div>
             </div>
           </>
         )}
@@ -2056,12 +2172,32 @@ function App() {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Draft AI Payment Nudge ({showNudgeModal.tenantName})</h3>
+              <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Draft AI Payment Nudge ({showNudgeModal.tenant.name})</h3>
               <button className="modal-close" onClick={() => setShowNudgeModal(null)}>
                 <X size={18} />
               </button>
             </div>
             
+            <div className="form-group" style={{ marginBottom: '16px' }}>
+              <label>Select AI Nudge Tone</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {(['pidgin', 'formal', 'urgent'] as const).map(t => (
+                  <button
+                    key={t}
+                    type="button"
+                    className={`btn ${showNudgeModal.tone === t ? 'btn-gold' : 'btn-secondary'}`}
+                    style={{ padding: '6px 12px', fontSize: '11px', flex: 1 }}
+                    onClick={() => {
+                      const newDraft = generateNudgeText(showNudgeModal.tenant, t);
+                      setShowNudgeModal({ ...showNudgeModal, tone: t, draft: newDraft });
+                    }}
+                  >
+                    {t === 'pidgin' ? 'Pidgin Friendly' : t === 'formal' ? 'Formal English' : 'Urgent & Firm'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="form-group">
               <label>AI Generated Reminder Draft (WhatsApp / SMS)</label>
               <textarea
@@ -2081,12 +2217,96 @@ function App() {
                 Cancel
               </button>
               <button className="btn" onClick={() => {
-                showToast(`Nudge successfully sent to ${showNudgeModal.tenantName}!`, 'success');
-                addLog('AI_AGENT', `Nudge message successfully dispatched via Twilio SMS to ${showNudgeModal.tenantName}`);
+                showToast(`Nudge successfully sent to ${showNudgeModal.tenant.name}!`, 'success');
+                addLog('AI_AGENT', `Nudge message successfully dispatched via Twilio SMS to ${showNudgeModal.tenant.name}`);
                 setShowNudgeModal(null);
               }}>
                 Dispatch Nudge Message
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 5: AI RISK PROFILE ASSESSMENT */}
+      {activeRiskTenant && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ borderTop: '4px solid var(--danger-red)', width: '520px' }}>
+            <div className="modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <ShieldAlert style={{ color: activeRiskTenant.riskScore === 'high' ? 'var(--danger-red)' : activeRiskTenant.riskScore === 'medium' ? 'var(--warning-yellow)' : 'var(--success-green)' }} />
+                <h3 style={{ fontSize: '16px', fontWeight: 800 }}>AI Risk Profile: {activeRiskTenant.name}</h3>
+              </div>
+              <button className="modal-close" onClick={() => setActiveRiskTenant(null)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
+              <span className={`badge ${activeRiskTenant.riskScore}`}>
+                {activeRiskTenant.riskScore} Risk Score
+              </span>
+              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                Assigned to: <b>{activeRiskTenant.property}</b>
+              </span>
+            </div>
+
+            <div style={{ background: 'var(--bg-darker)', padding: '14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
+              <div style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>AI Predictive Model Analysis</div>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.4' }}>{activeRiskTenant.riskAnalysis}</p>
+            </div>
+
+            {/* Payment History Timeline */}
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>
+                Payment History (Last 6 Months)
+              </div>
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between' }}>
+                {[
+                  { month: 'Jan', status: 'on-time' },
+                  { month: 'Feb', status: 'on-time' },
+                  { month: 'Mar', status: activeRiskTenant.riskScore === 'high' ? 'late' : 'on-time' },
+                  { month: 'Apr', status: activeRiskTenant.riskScore === 'high' ? 'late' : 'on-time' },
+                  { month: 'May', status: activeRiskTenant.riskScore === 'low' ? 'on-time' : 'missed' },
+                  { month: 'Jun', status: activeRiskTenant.status === 'paid' ? 'on-time' : 'overdue' }
+                ].map((item, idx) => (
+                  <div key={idx} style={{ flex: 1, textAlign: 'center' }}>
+                    <div style={{ height: '8px', borderRadius: '4px', background: item.status === 'on-time' ? 'var(--success-green)' : item.status === 'late' ? 'var(--warning-yellow)' : 'var(--danger-red)', marginBottom: '4px' }} />
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{item.month}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Stress Indicators */}
+            <div style={{ marginBottom: '16px', fontSize: '12px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>
+                Socio-Economic Stress Indicators
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-primary)' }}>
+                  <span style={{ color: activeRiskTenant.riskScore === 'high' ? 'var(--danger-red)' : 'var(--success-green)' }}>●</span>
+                  Inflation Sensitivity: {activeRiskTenant.riskScore === 'high' ? 'Critical' : 'Medium'}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-primary)' }}>
+                  <span style={{ color: activeRiskTenant.riskScore === 'high' ? 'var(--danger-red)' : 'var(--success-green)' }}>●</span>
+                  Business Sector Risk: {activeRiskTenant.riskScore === 'high' ? 'High' : 'Low'}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
+              <button className="btn btn-secondary" onClick={() => setActiveRiskTenant(null)}>
+                Close Profile
+              </button>
+              {activeRiskTenant.status !== 'paid' && (
+                <button className="btn" onClick={() => {
+                  triggerRentNudge(activeRiskTenant);
+                  setActiveRiskTenant(null);
+                }}>
+                  Draft Rent Nudge
+                </button>
+              )}
             </div>
           </div>
         </div>
