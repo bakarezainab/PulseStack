@@ -1300,45 +1300,47 @@ function App() {
                 </div>
               )}
 
-              <table>
-                <thead>
-                  <tr>
-                    <th>Emp ID</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Nomba Bank Details</th>
-                    <th>Monthly Salary</th>
-                    <th>Last Payout</th>
-                    <th>Status</th>
-                    <th>Payslip</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {employees.map(e => (
-                    <tr key={e.id} style={e.isDuplicate ? { backgroundColor: 'rgba(239, 68, 68, 0.04)' } : {}}>
-                      <td style={{ fontFamily: 'var(--font-mono)' }}>{e.id}</td>
-                      <td style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        {e.name}
-                        {e.isDuplicate && <span className="badge high" style={{ fontSize: '8px', padding: '2px 4px' }}>DUPLICATE</span>}
-                      </td>
-                      <td>{e.department}</td>
-                      <td>{e.bank} - {e.accountNumber}</td>
-                      <td style={{ fontWeight: 700 }}>₦{e.salary.toLocaleString()}</td>
-                      <td>{e.lastPaidDate || 'Not paid this cycle'}</td>
-                      <td>
-                        <span className={`badge ${e.status === 'paid' ? 'success' : 'pending'}`}>{e.status}</span>
-                      </td>
-                      <td>
-                        {e.status === 'paid' ? (
-                          <button className="btn btn-secondary" style={{ padding: '2px 8px', fontSize: '11px' }} onClick={() => setShowPayslipModal(e)}>
-                            <FileText size={12} /> View Payslip
-                          </button>
-                        ) : '-'}
-                      </td>
+              <div className="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Emp ID</th>
+                      <th>Name</th>
+                      <th>Department</th>
+                      <th>Nomba Bank Details</th>
+                      <th>Monthly Salary</th>
+                      <th>Last Payout</th>
+                      <th>Status</th>
+                      <th>Payslip</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {employees.map(e => (
+                      <tr key={e.id} style={e.isDuplicate ? { backgroundColor: 'rgba(239, 68, 68, 0.04)' } : {}}>
+                        <td style={{ fontFamily: 'var(--font-mono)' }}>{e.id}</td>
+                        <td style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          {e.name}
+                          {e.isDuplicate && <span className="badge high" style={{ fontSize: '8px', padding: '2px 4px' }}>DUPLICATE</span>}
+                        </td>
+                        <td>{e.department}</td>
+                        <td>{e.bank} - {e.accountNumber}</td>
+                        <td style={{ fontWeight: 700 }}>₦{e.salary.toLocaleString()}</td>
+                        <td>{e.lastPaidDate || 'Not paid this cycle'}</td>
+                        <td>
+                          <span className={`badge ${e.status === 'paid' ? 'success' : 'pending'}`}>{e.status}</span>
+                        </td>
+                        <td>
+                          {e.status === 'paid' ? (
+                            <button className="btn btn-secondary" style={{ padding: '2px 8px', fontSize: '11px' }} onClick={() => setShowPayslipModal(e)}>
+                              <FileText size={12} /> View Payslip
+                            </button>
+                          ) : '-'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div className="card" style={{ gridColumn: 'span 6' }}>
@@ -1399,44 +1401,46 @@ function App() {
                 Inventory levels auto-deduct in real time as sales webhooks settle via Nomba checkout interfaces.
               </p>
 
-              <table>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Unit Price</th>
-                    <th>Current Stock</th>
-                    <th>Weekly Velocity</th>
-                    <th>AI Stockout Predictor</th>
-                    <th>Supplier</th>
-                    <th>Total Revenue</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map(p => (
-                    <tr key={p.id}>
-                      <td style={{ fontWeight: 700 }}>{p.name}</td>
-                      <td>₦{p.price.toLocaleString()}</td>
-                      <td style={{ fontWeight: 700, color: p.stock <= p.reorderPoint ? 'var(--danger-red)' : 'var(--text-primary)' }}>
-                        {p.stock} units
-                      </td>
-                      <td>{p.velocity} units / wk</td>
-                      <td>
-                        {p.stock <= p.reorderPoint ? (
-                          <span className="badge high" style={{ fontSize: '10px' }}>
-                            Stockout in {Math.round((p.stock / p.velocity) * 7)} days!
-                          </span>
-                        ) : (
-                          <span className="badge success" style={{ fontSize: '10px' }}>
-                            Safe ({Math.round((p.stock / p.velocity) * 7)} days buffer)
-                          </span>
-                        )}
-                      </td>
-                      <td>{p.supplier}</td>
-                      <td style={{ fontWeight: 800, fontFamily: 'var(--font-mono)' }}>₦{p.revenue.toLocaleString()}</td>
+              <div className="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Unit Price</th>
+                      <th>Current Stock</th>
+                      <th>Weekly Velocity</th>
+                      <th>AI Stockout Predictor</th>
+                      <th>Supplier</th>
+                      <th>Total Revenue</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {products.map(p => (
+                      <tr key={p.id}>
+                        <td style={{ fontWeight: 700 }}>{p.name}</td>
+                        <td>₦{p.price.toLocaleString()}</td>
+                        <td style={{ fontWeight: 700, color: p.stock <= p.reorderPoint ? 'var(--danger-red)' : 'var(--text-primary)' }}>
+                          {p.stock} units
+                        </td>
+                        <td>{p.velocity} units / wk</td>
+                        <td>
+                          {p.stock <= p.reorderPoint ? (
+                            <span className="badge high" style={{ fontSize: '10px' }}>
+                              Stockout in {Math.round((p.stock / p.velocity) * 7)} days!
+                            </span>
+                          ) : (
+                            <span className="badge success" style={{ fontSize: '10px' }}>
+                              Safe ({Math.round((p.stock / p.velocity) * 7)} days buffer)
+                            </span>
+                          )}
+                        </td>
+                        <td>{p.supplier}</td>
+                        <td style={{ fontWeight: 800, fontFamily: 'var(--font-mono)' }}>₦{p.revenue.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div className="card" style={{ gridColumn: 'span 4' }}>
@@ -1564,30 +1568,32 @@ function App() {
                 </button>
               </div>
 
-              <table>
-                <thead>
-                  <tr>
-                    <th>Expense Description</th>
-                    <th>Date Logged</th>
-                    <th>Auto-Categorized Group</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {expenses.map(e => (
-                    <tr key={e.id}>
-                      <td style={{ fontWeight: 600 }}>{e.description}</td>
-                      <td>{e.date}</td>
-                      <td>
-                        <span className="badge success" style={{ textTransform: 'uppercase', fontSize: '11px', background: 'rgba(0,102,255,0.08)', color: 'var(--electric-blue-bright)' }}>
-                          {e.category}
-                        </span>
-                      </td>
-                      <td style={{ fontWeight: 700, fontFamily: 'var(--font-mono)' }}>₦{e.amount.toLocaleString()}</td>
+              <div className="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Expense Description</th>
+                      <th>Date Logged</th>
+                      <th>Auto-Categorized Group</th>
+                      <th>Amount</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {expenses.map(e => (
+                      <tr key={e.id}>
+                        <td style={{ fontWeight: 600 }}>{e.description}</td>
+                        <td>{e.date}</td>
+                        <td>
+                          <span className="badge success" style={{ textTransform: 'uppercase', fontSize: '11px', background: 'rgba(0,102,255,0.08)', color: 'var(--electric-blue-bright)' }}>
+                            {e.category}
+                          </span>
+                        </td>
+                        <td style={{ fontWeight: 700, fontFamily: 'var(--font-mono)' }}>₦{e.amount.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
