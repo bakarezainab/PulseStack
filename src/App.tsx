@@ -93,8 +93,15 @@ function App() {
   // Modals States
   const [showAddTenantModal, setShowAddTenantModal] = useState<boolean>(false);
   const [showPaymentLinkModal, setShowPaymentLinkModal] = useState<boolean>(false);
-  const [showNudgeModal, setShowNudgeModal] = useState<{ open: boolean; tenantName: string; draft: string } | null>(null);
+  const [showNudgeModal, setShowNudgeModal] = useState<{
+    open: boolean;
+    tenant: { name: string; property: string; rentAmount: number; dueDate: string; id: string; isAjo?: boolean };
+    tone: 'pidgin' | 'formal' | 'urgent';
+    draft: string;
+  } | null>(null);
   const [showPayslipModal, setShowPayslipModal] = useState<Employee | null>(null);
+  const [activeRiskTenant, setActiveRiskTenant] = useState<Tenant | null>(null);
+  const [activeLogFilter, setActiveLogFilter] = useState<'ALL' | 'WEBHOOK' | 'AI_AGENT' | 'NOMBA_API' | 'CRYPTO_SETTLE'>('ALL');
   
   // Form States
   const [newTenant, setNewTenant] = useState({ name: '', property: '', rentAmount: '', dueDate: '', phone: '' });
