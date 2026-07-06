@@ -2068,6 +2068,11 @@ function App() {
             <div className="card" style={{ gridColumn: 'span 12' }}>
               <div className="card-header-flex">
                 <span className="card-title"><TrendingUp /> Transaction Volume Trend (Last 7 Days)</span>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button className="btn btn-secondary" style={{ padding: '4px 12px', fontSize: '11px' }}>Daily</button>
+                  <button className="btn btn-gold" style={{ padding: '4px 12px', fontSize: '11px', color: 'var(--bg-darkest)' }}>Weekly</button>
+                  <button className="btn btn-secondary" style={{ padding: '4px 12px', fontSize: '11px' }}>Monthly</button>
+                </div>
               </div>
               <div style={{ height: '200px', marginTop: '16px' }}>
                 <svg viewBox="0 0 700 150" style={{ width: '100%', height: '100%' }}>
@@ -2077,20 +2082,72 @@ function App() {
                   ))}
                   {/* Bars */}
                   {[
-                    { day: 'Mon', height: 80 },
-                    { day: 'Tue', height: 100 },
-                    { day: 'Wed', height: 60 },
-                    { day: 'Thu', height: 120 },
-                    { day: 'Fri', height: 90 },
-                    { day: 'Sat', height: 110 },
-                    { day: 'Sun', height: 70 }
+                    { day: 'Mon', height: 80, amount: '₦420K' },
+                    { day: 'Tue', height: 100, amount: '₦580K' },
+                    { day: 'Wed', height: 60, amount: '₦320K' },
+                    { day: 'Thu', height: 120, amount: '₦750K' },
+                    { day: 'Fri', height: 90, amount: '₦510K' },
+                    { day: 'Sat', height: 110, amount: '₦680K' },
+                    { day: 'Sun', height: 70, amount: '₦380K' }
                   ].map((d, i) => (
                     <g key={i}>
                       <rect x={80 + i * 90} y={150 - d.height} width="50" height={d.height} fill="var(--electric-blue)" rx="4" opacity="0.8" />
                       <text x={105 + i * 90} y="148" fill="var(--text-muted)" fontSize="10" textAnchor="middle">{d.day}</text>
+                      <text x={105 + i * 90} y={150 - d.height - 5} fill="var(--text-secondary)" fontSize="8" textAnchor="middle">{d.amount}</text>
                     </g>
                   ))}
                 </svg>
+              </div>
+            </div>
+
+            {/* Top Performers */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Users /> Top Performing Tenants</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+                {tenants.filter(t => t.status === 'paid').map((tenant, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px', background: 'var(--bg-darker)', borderRadius: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--electric-blue-glow)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: 'var(--electric-blue-bright)' }}>
+                        {tenant.name.charAt(0)}
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, fontSize: '13px' }}>{tenant.name}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{tenant.property}</div>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontWeight: 700, color: 'var(--success-green)' }}>₦{tenant.rentAmount.toLocaleString()}</div>
+                      <div style={{ fontSize: '10px', color: 'var(--success-green)' }}>Paid</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Key Metrics Summary */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Activity /> Key Metrics Summary</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '12px' }}>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--electric-blue-bright)' }}>{transactions.length}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Total Transactions</div>
+                </div>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--success-green)' }}>{tenants.filter(t => t.status === 'paid').length}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Paid Tenants</div>
+                </div>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--accent-gold)' }}>{employees.filter(e => !e.isDuplicate).length}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Active Employees</div>
+                </div>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--warning-yellow)' }}>{products.length}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Product Lines</div>
+                </div>
               </div>
             </div>
           </div>
