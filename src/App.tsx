@@ -17,7 +17,27 @@ import {
   MessageSquare,
   X,
   FileText,
-  ArrowRight
+  ArrowRight,
+  Settings,
+  BarChart3,
+  HelpCircle,
+  Moon,
+  Sun,
+  Volume2,
+  VolumeX,
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  ChevronRight,
+  Save,
+  RefreshCw,
+  Download,
+  Filter,
+  Calendar,
+  ExternalLink,
+  BookOpen,
+  Zap
 } from 'lucide-react';
 import type {
   Transaction,
