@@ -1936,6 +1936,7 @@ function App() {
             <div className="card" style={{ gridColumn: 'span 4' }}>
               <div className="card-header-flex">
                 <span className="card-title"><TrendingUp /> Total Revenue</span>
+                <span className="badge success">This Month</span>
               </div>
               <div style={{ fontSize: '36px', fontWeight: 800, color: 'var(--success-green)', fontFamily: 'var(--font-mono)' }}>
                 ₦4.85M
