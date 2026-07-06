@@ -2413,6 +2413,13 @@ function App() {
                     <div style={{ fontWeight: 600 }}>Mon-Fri, 8AM - 6PM WAT</div>
                   </div>
                 </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <MessageSquare size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Live Chat</div>
+                    <div style={{ fontWeight: 600, color: 'var(--success-green)' }}>Available Now</div>
+                  </div>
+                </div>
               </div>
             </div>
 
