@@ -2010,9 +2010,14 @@ function App() {
             <div className="card" style={{ gridColumn: 'span 6' }}>
               <div className="card-header-flex">
                 <span className="card-title"><CreditCard /> Payment Channels</span>
-                <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }}>
-                  <Filter size={12} /> Filter
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }}>
+                    <Filter size={12} /> Filter
+                  </button>
+                  <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }} onClick={() => showToast('Exporting payment channels data...', 'info')}>
+                    <Download size={12} /> Export
+                  </button>
+                </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
                 {[
