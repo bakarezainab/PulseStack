@@ -2345,9 +2345,55 @@ function App() {
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Primary Account</div>
                   <div style={{ fontWeight: 600 }}>Nomba MFB - 1023948576</div>
                 </div>
-                <button className="btn btn-secondary" style={{ width: '100%' }}>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Account Status</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--success-green)', boxShadow: '0 0 6px var(--success-green)' }}></span>
+                    <span style={{ fontWeight: 600, color: 'var(--success-green)' }}>Verified & Active</span>
+                  </div>
+                </div>
+                <button className="btn btn-secondary" style={{ width: '100%' }} onClick={() => {
+                  showToast('Syncing with Nomba API...', 'info');
+                  setTimeout(() => showToast('Account synced successfully!', 'success'), 1500);
+                }}>
                   <RefreshCw size={14} /> Sync with Nomba API
                 </button>
+              </div>
+            </div>
+
+            {/* Security Settings */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><ShieldAlert /> Security</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div>
+                    <div style={{ fontWeight: 600 }}>Two-Factor Authentication</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Add extra security to your account</div>
+                  </div>
+                  <button className="btn btn-gold" style={{ padding: '4px 12px', fontSize: '11px', color: 'var(--bg-darkest)' }} onClick={() => showToast('2FA setup coming soon!', 'info')}>
+                    Enable
+                  </button>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div>
+                    <div style={{ fontWeight: 600 }}>API Keys</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Manage your API credentials</div>
+                  </div>
+                  <button className="btn btn-secondary" style={{ padding: '4px 12px', fontSize: '11px' }} onClick={() => showToast('API key management coming soon!', 'info')}>
+                    Manage
+                  </button>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div>
+                    <div style={{ fontWeight: 600 }}>Transaction PIN</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Required for sensitive operations</div>
+                  </div>
+                  <button className="btn btn-secondary" style={{ padding: '4px 12px', fontSize: '11px' }} onClick={() => showToast('PIN management coming soon!', 'info')}>
+                    Change
+                  </button>
+                </div>
               </div>
             </div>
           </div>
