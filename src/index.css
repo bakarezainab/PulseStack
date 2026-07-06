@@ -1081,3 +1081,52 @@ tr:hover td {
   cursor: pointer;
   z-index: 1000;
 }
+
+/* Settings Page Styles */
+.settings-toggle {
+  transition: all 0.3s ease;
+}
+
+.settings-toggle:hover {
+  transform: scale(1.02);
+}
+
+/* Analytics Charts */
+.analytics-chart {
+  background: linear-gradient(180deg, var(--bg-darker) 0%, var(--bg-card) 100%);
+  border-radius: 12px;
+}
+
+/* Help Center Styles */
+.faq-item {
+  transition: all 0.2s ease;
+}
+
+.faq-item:hover {
+  background-color: var(--bg-hover);
+  border-left-color: var(--accent-gold);
+}
+
+/* Status Indicator Animation */
+@keyframes pulseStatus {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.status-pulse {
+  animation: pulseStatus 2s ease-in-out infinite;
+}
+
+/* Card hover effects for new pages */
+.card-hover-effect {
+  transition: all 0.3s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 102, 255, 0.1);
+}
