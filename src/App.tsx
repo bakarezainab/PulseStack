@@ -54,7 +54,7 @@ interface Toast {
 function App() {
   // Navigation State
   const [viewMode, setViewMode] = useState<'landing' | 'dashboard'>('landing');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'collections' | 'rent' | 'payroll' | 'inventory' | 'expenses' | 'ajo' | 'diaspora'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'collections' | 'rent' | 'payroll' | 'inventory' | 'expenses' | 'ajo' | 'diaspora' | 'settings' | 'analytics' | 'help'>('dashboard');
   
   // Business State
   const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_TRANSACTIONS);
