@@ -781,6 +781,22 @@ function App() {
             <span>Diaspora Send</span>
           </div>
           
+          <span className="nav-section-title">Insights</span>
+          <div className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>
+            <BarChart3 />
+            <span>Analytics</span>
+          </div>
+          
+          <span className="nav-section-title">Support</span>
+          <div className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
+            <Settings />
+            <span>Settings</span>
+          </div>
+          <div className={`nav-item ${activeTab === 'help' ? 'active' : ''}`} onClick={() => setActiveTab('help')}>
+            <HelpCircle />
+            <span>Help & Support</span>
+          </div>
+          
           <span className="nav-section-title">Exit</span>
           <div className="nav-item" onClick={() => setViewMode('landing')}>
             <Globe />
