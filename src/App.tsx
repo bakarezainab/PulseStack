@@ -1915,6 +1915,500 @@ function App() {
           </div>
         )}
 
+        {/* VIEW 9: ANALYTICS & REPORTS */}
+        {activeTab === 'analytics' && (
+          <div className="dashboard-grid">
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><BarChart3 /> Business Analytics Dashboard</span>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button className="btn btn-secondary" style={{ padding: '4px 12px', fontSize: '12px' }}>
+                    <Calendar size={14} /> Last 30 Days
+                  </button>
+                  <button className="btn btn-secondary" style={{ padding: '4px 12px', fontSize: '12px' }}>
+                    <Download size={14} /> Export Report
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Revenue Overview */}
+            <div className="card" style={{ gridColumn: 'span 4' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><TrendingUp /> Total Revenue</span>
+              </div>
+              <div style={{ fontSize: '36px', fontWeight: 800, color: 'var(--success-green)', fontFamily: 'var(--font-mono)' }}>
+                ₦4.85M
+              </div>
+              <div style={{ fontSize: '12px', color: 'var(--success-green)', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <TrendingUp size={14} /> +23.5% vs last month
+              </div>
+              <div style={{ marginTop: '16px', height: '80px' }}>
+                <svg viewBox="0 0 200 50" style={{ width: '100%', height: '100%' }}>
+                  <path d="M 0,40 L 30,35 L 60,38 L 90,25 L 120,20 L 150,15 L 180,10 L 200,5" fill="none" stroke="var(--success-green)" strokeWidth="2" />
+                  <path d="M 0,40 L 30,35 L 60,38 L 90,25 L 120,20 L 150,15 L 180,10 L 200,5 L 200,50 L 0,50 Z" fill="url(#greenGrad)" opacity="0.2" />
+                  <defs>
+                    <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--success-green)" />
+                      <stop offset="100%" stopColor="transparent" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+
+            {/* Expenses Overview */}
+            <div className="card" style={{ gridColumn: 'span 4' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><PieChart /> Total Expenses</span>
+              </div>
+              <div style={{ fontSize: '36px', fontWeight: 800, color: 'var(--danger-red)', fontFamily: 'var(--font-mono)' }}>
+                ₦1.12M
+              </div>
+              <div style={{ fontSize: '12px', color: 'var(--danger-red)', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <TrendingUp size={14} style={{ transform: 'rotate(180deg)' }} /> +8.2% vs last month
+              </div>
+              <div style={{ marginTop: '16px', height: '80px' }}>
+                <svg viewBox="0 0 200 50" style={{ width: '100%', height: '100%' }}>
+                  <path d="M 0,30 L 30,32 L 60,28 L 90,35 L 120,30 L 150,38 L 180,40 L 200,42" fill="none" stroke="var(--danger-red)" strokeWidth="2" />
+                  <path d="M 0,30 L 30,32 L 60,28 L 90,35 L 120,30 L 150,38 L 180,40 L 200,42 L 200,50 L 0,50 Z" fill="url(#redGrad)" opacity="0.2" />
+                  <defs>
+                    <linearGradient id="redGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--danger-red)" />
+                      <stop offset="100%" stopColor="transparent" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+
+            {/* Net Profit */}
+            <div className="card" style={{ gridColumn: 'span 4' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Activity /> Net Profit</span>
+              </div>
+              <div style={{ fontSize: '36px', fontWeight: 800, color: 'var(--accent-gold)', fontFamily: 'var(--font-mono)' }}>
+                ₦3.73M
+              </div>
+              <div style={{ fontSize: '12px', color: 'var(--success-green)', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <TrendingUp size={14} /> +31.2% margin
+              </div>
+              <div style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
+                <div style={{ flex: 1, background: 'var(--bg-darker)', padding: '8px', borderRadius: '6px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Margin</div>
+                  <div style={{ fontWeight: 700, color: 'var(--accent-gold)' }}>77%</div>
+                </div>
+                <div style={{ flex: 1, background: 'var(--bg-darker)', padding: '8px', borderRadius: '6px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Growth</div>
+                  <div style={{ fontWeight: 700, color: 'var(--success-green)' }}>+18%</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Channels Breakdown */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><CreditCard /> Payment Channels</span>
+                <button className="btn btn-secondary" style={{ padding: '4px 8px', fontSize: '11px' }}>
+                  <Filter size={12} /> Filter
+                </button>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                {[
+                  { name: 'Payment Links', amount: 1850000, percent: 38, color: 'var(--electric-blue)' },
+                  { name: 'Virtual Accounts', amount: 1520000, percent: 31, color: 'var(--accent-gold)' },
+                  { name: 'QR Code Payments', amount: 980000, percent: 20, color: 'var(--success-green)' },
+                  { name: 'Crypto Remittance', amount: 500000, percent: 11, color: 'var(--warning-yellow)' }
+                ].map((channel, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '100px', fontSize: '12px', color: 'var(--text-secondary)' }}>{channel.name}</div>
+                    <div style={{ flex: 1, height: '8px', background: 'var(--bg-darker)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ width: `${channel.percent}%`, height: '100%', background: channel.color, borderRadius: '4px' }} />
+                    </div>
+                    <div style={{ width: '80px', textAlign: 'right', fontSize: '12px', fontWeight: 600 }}>₦{(channel.amount / 1000000).toFixed(2)}M</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Expense Categories */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><PieChart /> Expense Categories</span>
+              </div>
+              <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
+                <div style={{ width: '150px', height: '150px', position: 'relative' }}>
+                  <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--bg-darker)" strokeWidth="20" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--danger-red)" strokeWidth="20" strokeDasharray="75 251" strokeDashoffset="0" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--warning-yellow)" strokeWidth="20" strokeDasharray="50 251" strokeDashoffset="-75" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--electric-blue)" strokeWidth="20" strokeDasharray="40 251" strokeDashoffset="-125" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--success-green)" strokeWidth="20" strokeDasharray="35 251" strokeDashoffset="-165" />
+                  </svg>
+                </div>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
+                  {[
+                    { name: 'Generator/Fuel', percent: 30, color: 'var(--danger-red)' },
+                    { name: 'Staff Feeding', percent: 20, color: 'var(--warning-yellow)' },
+                    { name: 'Transport', percent: 16, color: 'var(--electric-blue)' },
+                    { name: 'Data/Airtime', percent: 14, color: 'var(--success-green)' },
+                    { name: 'Others', percent: 20, color: 'var(--text-muted)' }
+                  ].map((cat, idx) => (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: cat.color }} />
+                      <span style={{ flex: 1 }}>{cat.name}</span>
+                      <span style={{ fontWeight: 600 }}>{cat.percent}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Transaction Volume Trend */}
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><TrendingUp /> Transaction Volume Trend (Last 7 Days)</span>
+              </div>
+              <div style={{ height: '200px', marginTop: '16px' }}>
+                <svg viewBox="0 0 700 150" style={{ width: '100%', height: '100%' }}>
+                  {/* Grid lines */}
+                  {[0, 1, 2, 3, 4].map(i => (
+                    <line key={i} x1="50" y1={30 + i * 30} x2="680" y2={30 + i * 30} stroke="var(--border-color)" strokeWidth="1" strokeDasharray="4" />
+                  ))}
+                  {/* Bars */}
+                  {[
+                    { day: 'Mon', height: 80 },
+                    { day: 'Tue', height: 100 },
+                    { day: 'Wed', height: 60 },
+                    { day: 'Thu', height: 120 },
+                    { day: 'Fri', height: 90 },
+                    { day: 'Sat', height: 110 },
+                    { day: 'Sun', height: 70 }
+                  ].map((d, i) => (
+                    <g key={i}>
+                      <rect x={80 + i * 90} y={150 - d.height} width="50" height={d.height} fill="var(--electric-blue)" rx="4" opacity="0.8" />
+                      <text x={105 + i * 90} y="148" fill="var(--text-muted)" fontSize="10" textAnchor="middle">{d.day}</text>
+                    </g>
+                  ))}
+                </svg>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* VIEW 10: SETTINGS */}
+        {activeTab === 'settings' && (
+          <div className="dashboard-grid">
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Settings /> Application Settings</span>
+                <button className="btn btn-gold" style={{ padding: '6px 16px', fontSize: '12px' }}>
+                  <Save size={14} /> Save Changes
+                </button>
+              </div>
+            </div>
+
+            {/* Appearance Settings */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Moon /> Appearance</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {settings.darkMode ? <Moon size={18} style={{ color: 'var(--electric-blue-bright)' }} : <Sun size={18} style={{ color: 'var(--accent-gold)' }} />}
+                    <div>
+                      <div style={{ fontWeight: 600 }}>Dark Mode</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Use dark theme for better visibility</div>
+                    </div>
+                  </div>
+                  <button
+                    className={`btn ${settings.darkMode ? 'btn-gold' : 'btn-secondary'}`}
+                    style={{ padding: '4px 12px', fontSize: '11px' }}
+                    onClick={() => setSettings(prev => ({ ...prev, darkMode: !prev.darkMode }))}
+                  >
+                    {settings.darkMode ? 'On' : 'Off'}
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {settings.soundEffects ? <Volume2 size={18} style={{ color: 'var(--electric-blue-bright)' }} : <VolumeX size={18} style={{ color: 'var(--text-muted)' }} />}
+                    <div>
+                      <div style={{ fontWeight: 600 }}>Sound Effects</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Play sounds for transactions</div>
+                    </div>
+                  </div>
+                  <button
+                    className={`btn ${settings.soundEffects ? 'btn-gold' : 'btn-secondary'}`}
+                    style={{ padding: '4px 12px', fontSize: '11px' }}
+                    onClick={() => setSettings(prev => ({ ...prev, soundEffects: !prev.soundEffects }))}
+                  >
+                    {settings.soundEffects ? 'On' : 'Off'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Notification Settings */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Bell /> Notifications</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <Bell size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                    <div>
+                      <div style={{ fontWeight: 600 }}>Push Notifications</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Receive browser notifications</div>
+                    </div>
+                  </div>
+                  <button
+                    className={`btn ${settings.notifications ? 'btn-gold' : 'btn-secondary'}`}
+                    style={{ padding: '4px 12px', fontSize: '11px' }}
+                    onClick={() => setSettings(prev => ({ ...prev, notifications: !prev.notifications }))}
+                  >
+                    {settings.notifications ? 'On' : 'Off'}
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <Mail size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                    <div>
+                      <div style={{ fontWeight: 600 }}>Email Alerts</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Receive transaction summaries</div>
+                    </div>
+                  </div>
+                  <button
+                    className={`btn ${settings.emailAlerts ? 'btn-gold' : 'btn-secondary'}`}
+                    style={{ padding: '4px 12px', fontSize: '11px' }}
+                    onClick={() => setSettings(prev => ({ ...prev, emailAlerts: !prev.emailAlerts }))}
+                  >
+                    {settings.emailAlerts ? 'On' : 'Off'}
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <Phone size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                    <div>
+                      <div style={{ fontWeight: 600 }}>SMS Alerts</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Receive SMS for urgent events</div>
+                    </div>
+                  </div>
+                  <button
+                    className={`btn ${settings.smsAlerts ? 'btn-gold' : 'btn-secondary'}`}
+                    style={{ padding: '4px 12px', fontSize: '11px' }}
+                    onClick={() => setSettings(prev => ({ ...prev, smsAlerts: !prev.smsAlerts }))}
+                  >
+                    {settings.smsAlerts ? 'On' : 'Off'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Business Settings */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Building /> Business Settings</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                <div className="form-group">
+                  <label>Language Preference</label>
+                  <select
+                    className="form-control"
+                    value={settings.language}
+                    onChange={e => setSettings(prev => ({ ...prev, language: e.target.value as 'en' | 'pidgin' }))}
+                  >
+                    <option value="en">English</option>
+                    <option value="pidgin">Nigerian Pidgin</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Display Currency</label>
+                  <select
+                    className="form-control"
+                    value={settings.currency}
+                    onChange={e => setSettings(prev => ({ ...prev, currency: e.target.value as 'NGN' | 'USD' }))}
+                  >
+                    <option value="NGN">Nigerian Naira (₦)</option>
+                    <option value="USD">US Dollar ($)</option>
+                  </select>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div>
+                    <div style={{ fontWeight: 600 }}>Auto Settlement</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Automatically settle payments</div>
+                  </div>
+                  <button
+                    className={`btn ${settings.autoSettlement ? 'btn-gold' : 'btn-secondary'}`}
+                    style={{ padding: '4px 12px', fontSize: '11px' }}
+                    onClick={() => setSettings(prev => ({ ...prev, autoSettlement: !prev.autoSettlement }))}
+                  >
+                    {settings.autoSettlement ? 'On' : 'Off'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Account Info */}
+            <div className="card" style={{ gridColumn: 'span 6' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Users /> Account Information</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Business Name</div>
+                  <div style={{ fontWeight: 600 }}>Z-Pulse Fashion House</div>
+                </div>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Nomba Merchant ID</div>
+                  <div style={{ fontWeight: 600, fontFamily: 'var(--font-mono)' }}>893427</div>
+                </div>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Primary Account</div>
+                  <div style={{ fontWeight: 600 }}>Nomba MFB - 1023948576</div>
+                </div>
+                <button className="btn btn-secondary" style={{ width: '100%' }}>
+                  <RefreshCw size={14} /> Sync with Nomba API
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* VIEW 11: HELP & SUPPORT */}
+        {activeTab === 'help' && (
+          <div className="dashboard-grid">
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><HelpCircle /> Help & Support Center</span>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginTop: '8px' }}>
+                Get help with PulseStack features, troubleshooting, and best practices.
+              </p>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="card" style={{ gridColumn: 'span 4' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Zap /> Quick Actions</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px' }}>
+                <button className="btn btn-secondary" style={{ justifyContent: 'space-between', width: '100%' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={16} /> View Documentation</span>
+                  <ChevronRight size={16} />
+                </button>
+                <button className="btn btn-secondary" style={{ justifyContent: 'space-between', width: '100%' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><MessageSquare size={16} /> Contact Support</span>
+                  <ChevronRight size={16} />
+                </button>
+                <button className="btn btn-secondary" style={{ justifyContent: 'space-between', width: '100%' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><FileText size={16} /> Submit Feedback</span>
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+
+            {/* Contact Info */}
+            <div className="card" style={{ gridColumn: 'span 4' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Mail /> Contact Information</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <Mail size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Email Support</div>
+                    <div style={{ fontWeight: 600 }}>support@pulsestack.io</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <Phone size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Phone Support</div>
+                    <div style={{ fontWeight: 600 }}>+234 800 PULSE 00</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <Clock size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Support Hours</div>
+                    <div style={{ fontWeight: 600 }}>Mon-Fri, 8AM - 6PM WAT</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Office Location */}
+            <div className="card" style={{ gridColumn: 'span 4' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><MapPin /> Office Location</span>
+              </div>
+              <div style={{ marginTop: '12px', padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                <div style={{ fontWeight: 600, marginBottom: '8px' }}>PulseStack HQ</div>
+                <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  14 Admiralty Way,<br />
+                  Lekki Phase 1,<br />
+                  Lagos, Nigeria
+                </div>
+                <button className="btn btn-secondary" style={{ width: '100%', marginTop: '12px' }}>
+                  <ExternalLink size={14} /> Open in Maps
+                </button>
+              </div>
+            </div>
+
+            {/* FAQs */}
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><HelpCircle /> Frequently Asked Questions</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                {[
+                  { q: 'How do I accept payments via Nomba?', a: 'Navigate to Smart Payments and create a payment link. Share the link with your customer to receive payments instantly.' },
+                  { q: 'How does the AI predict rent defaults?', a: 'PulseAI analyzes tenant payment history, economic indicators, and behavioral patterns to predict payment reliability.' },
+                  { q: 'Can I receive crypto payments?', a: 'Yes! Use the Diaspora Send feature to accept USDT/USDC which converts to Naira at live rates.' },
+                  { q: 'How do I run payroll for my staff?', a: 'Go to Payroll & Staff, review employee details, and click "Pay all staff salaries" for instant bulk payout via Nomba.' }
+                ].map((faq, idx) => (
+                  <div key={idx} style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px', borderLeft: '3px solid var(--electric-blue)' }}>
+                    <div style={{ fontWeight: 600, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <ChevronRight size={16} style={{ color: 'var(--electric-blue-bright)' }} />
+                      {faq.q}
+                    </div>
+                    <div style={{ fontSize: '13px', color: 'var(--text-secondary)', paddingLeft: '24px' }}>{faq.a}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* System Status */}
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Activity /> System Status</span>
+                <span className="badge success" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--success-green)', display: 'inline-block' }}></span>
+                  All Systems Operational
+                </span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '16px' }}>
+                {[
+                  { name: 'Nomba API', status: 'Operational' },
+                  { name: 'PulseAI Engine', status: 'Operational' },
+                  { name: 'Webhook Service', status: 'Operational' },
+                  { name: 'Crypto Gateway', status: 'Operational' }
+                ].map((service, idx) => (
+                  <div key={idx} style={{ padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 600 }}>{service.name}</div>
+                    <div style={{ fontSize: '11px', color: 'var(--success-green)', marginTop: '4px' }}>● {service.status}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
       {/* AI Assistant Chat Sidebar */}
