@@ -2483,16 +2483,31 @@ function App() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '16px' }}>
                 {[
-                  { name: 'Nomba API', status: 'Operational' },
-                  { name: 'PulseAI Engine', status: 'Operational' },
-                  { name: 'Webhook Service', status: 'Operational' },
-                  { name: 'Crypto Gateway', status: 'Operational' }
+                  { name: 'Nomba API', status: 'Operational', uptime: '99.99%' },
+                  { name: 'PulseAI Engine', status: 'Operational', uptime: '99.95%' },
+                  { name: 'Webhook Service', status: 'Operational', uptime: '99.98%' },
+                  { name: 'Crypto Gateway', status: 'Operational', uptime: '99.90%' }
                 ].map((service, idx) => (
                   <div key={idx} style={{ padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px', textAlign: 'center' }}>
                     <div style={{ fontSize: '12px', fontWeight: 600 }}>{service.name}</div>
                     <div style={{ fontSize: '11px', color: 'var(--success-green)', marginTop: '4px' }}>● {service.status}</div>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>Uptime: {service.uptime}</div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Version Info */}
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                <div>
+                  <div style={{ fontWeight: 700 }}>PulseStack v1.0.0</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Built for DevCareer x Nomba Hackathon 2026</div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button className="btn btn-secondary" style={{ padding: '6px 12px', fontSize: '11px' }}>View Changelog</button>
+                  <button className="btn btn-gold" style={{ padding: '6px 12px', fontSize: '11px', color: 'var(--bg-darkest)' }}>Check for Updates</button>
+                </div>
               </div>
             </div>
           </div>
