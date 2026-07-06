@@ -2147,6 +2147,23 @@ function App() {
                     {settings.soundEffects ? 'On' : 'Off'}
                   </button>
                 </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <Zap size={18} style={{ color: 'var(--accent-gold)' }} />
+                    <div>
+                      <div style={{ fontWeight: 600 }}>Compact Mode</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Reduce spacing for more content</div>
+                    </div>
+                  </div>
+                  <button
+                    className="btn btn-secondary"
+                    style={{ padding: '4px 12px', fontSize: '11px' }}
+                    onClick={() => showToast('Compact mode coming soon!', 'info')}
+                  >
+                    Coming Soon
+                  </button>
+                </div>
               </div>
             </div>
 
