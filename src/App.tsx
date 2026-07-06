@@ -2381,13 +2381,21 @@ function App() {
             <div className="card" style={{ gridColumn: 'span 12' }}>
               <div className="card-header-flex">
                 <span className="card-title"><HelpCircle /> Frequently Asked Questions</span>
+                <input
+                  type="text"
+                  placeholder="Search FAQs..."
+                  className="form-control"
+                  style={{ width: '200px', padding: '6px 12px', fontSize: '12px' }}
+                />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
                 {[
                   { q: 'How do I accept payments via Nomba?', a: 'Navigate to Smart Payments and create a payment link. Share the link with your customer to receive payments instantly.' },
                   { q: 'How does the AI predict rent defaults?', a: 'PulseAI analyzes tenant payment history, economic indicators, and behavioral patterns to predict payment reliability.' },
                   { q: 'Can I receive crypto payments?', a: 'Yes! Use the Diaspora Send feature to accept USDT/USDC which converts to Naira at live rates.' },
-                  { q: 'How do I run payroll for my staff?', a: 'Go to Payroll & Staff, review employee details, and click "Pay all staff salaries" for instant bulk payout via Nomba.' }
+                  { q: 'How do I run payroll for my staff?', a: 'Go to Payroll & Staff, review employee details, and click "Pay all staff salaries" for instant bulk payout via Nomba.' },
+                  { q: 'What is the settlement time for Nomba payments?', a: 'Nomba payments settle within T+1 (next business day) for most transactions. Crypto remittances settle instantly.' },
+                  { q: 'How do I add a new tenant to my property?', a: 'Navigate to Rent & Properties, click "Add Property / Tenant" and fill in the tenant details. A virtual account will be auto-generated.' }
                 ].map((faq, idx) => (
                   <div key={idx} style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px', borderLeft: '3px solid var(--electric-blue)' }}>
                     <div style={{ fontWeight: 600, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
