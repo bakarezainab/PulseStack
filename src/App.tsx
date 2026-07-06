@@ -131,6 +131,18 @@ function App() {
   // Crypto / Diaspora Remittance State
   const [cryptoForm, setCryptoForm] = useState({ sender: '', amountUsd: '200', recipientAccount: '1023948576' });
 
+  // Settings State
+  const [settings, setSettings] = useState({
+    darkMode: true,
+    notifications: true,
+    soundEffects: false,
+    autoSettlement: true,
+    language: 'en' as 'en' | 'pidgin',
+    currency: 'NGN' as 'NGN' | 'USD',
+    emailAlerts: true,
+    smsAlerts: false
+  });
+
   // Heartbeat Logo / Live Chart Simulator
   useEffect(() => {
     const interval = setInterval(() => {
