@@ -2579,6 +2579,73 @@ function App() {
                 </div>
               </div>
             </div>
+
+            {/* API Configuration */}
+            <div className="card" style={{ gridColumn: 'span 12' }}>
+              <div className="card-header-flex">
+                <span className="card-title"><Globe /> Nomba API Configuration</span>
+                <span className={`badge ${apiConnected ? 'success' : 'pending'}`} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {apiConnected ? (
+                    <Wifi size={10} style={{ color: 'var(--success-green)' }} />
+                  ) : (
+                    <WifiOff size={10} style={{ color: 'var(--warning-yellow)' }} />
+                  )}
+                  {apiConnected ? 'Connected' : 'Simulation Mode'}
+                </span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginTop: '16px' }}>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Parent Account ID</div>
+                  <div style={{ fontWeight: 600, fontFamily: 'var(--font-mono)', fontSize: '12px', wordBreak: 'break-all' }}>
+                    {nombaApi.config.accountId}
+                  </div>
+                </div>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Sub Account ID</div>
+                  <div style={{ fontWeight: 600, fontFamily: 'var(--font-mono)', fontSize: '12px', wordBreak: 'break-all' }}>
+                    {nombaApi.config.subAccountId}
+                  </div>
+                </div>
+                <div style={{ padding: '16px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>API Status</div>
+                  <div style={{ fontWeight: 600, color: apiConnected ? 'var(--success-green)' : 'var(--warning-yellow)' }}>
+                    {apiConnected ? 'Live Connection' : 'Using Simulation'}
+                  </div>
+                </div>
+              </div>
+              <div style={{ marginTop: '16px', display: 'flex', gap: '10px' }}>
+                <button 
+                  className="btn btn-secondary" 
+                  style={{ padding: '8px 16px', fontSize: '12px' }}
+                  onClick={async () => {
+                    showToast('Testing API connection...', 'info');
+                    try {
+                      const result = await nombaApi.getBalance();
+                      if (result.success) {
+                        setApiConnected(true);
+                        showToast('API connection successful!', 'success');
+                      }
+                    } catch {
+                      setApiConnected(false);
+                      showToast('API connection failed - using simulation mode', 'flagged');
+                    }
+                  }}
+                >
+                  <RefreshCw size={14} /> Test Connection
+                </button>
+                <button 
+                  className={`btn ${useRealApi ? 'btn-gold' : 'btn-secondary'}`}
+                  style={{ padding: '8px 16px', fontSize: '12px', color: useRealApi ? 'var(--bg-darkest)' : undefined }}
+                  onClick={() => {
+                    setUseRealApi(!useRealApi);
+                    showToast(useRealApi ? 'Switched to simulation mode' : 'Switched to live API mode', 'info');
+                  }}
+                >
+                  {useRealApi ? <Wifi size={14} /> : <WifiOff size={14} />}
+                  {useRealApi ? ' Live API Mode' : ' Simulation Mode'}
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
