@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Activity,
   CreditCard,
@@ -60,7 +60,6 @@ import {
   parseAiCommand
 } from './mockData';
 import { useNombaApi } from './hooks/useNombaApi';
-import { simulateWebhook, processWebhook, type NombaWebhookPayload } from './services/webhookHandler';
 
 interface WebhookLog {
   id: string;

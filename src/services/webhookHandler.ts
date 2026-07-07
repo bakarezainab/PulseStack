@@ -58,9 +58,9 @@ let webhookLogs: WebhookLogEntry[] = [];
  * In production, this should validate against Nomba's public key
  */
 export function verifyWebhookSignature(
-  payload: string,
+  _payload: string,
   signature: string,
-  secret: string
+  _secret: string
 ): boolean {
   // In a real implementation, you would use crypto to verify the signature
   // For demo purposes, we're just checking if signature exists
