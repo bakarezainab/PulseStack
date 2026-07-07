@@ -208,3 +208,127 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## 📄 License
 
 MIT © 2025 [Zainab Bakare](https://github.com/bakarezainab) — Built with ❤️ for the DevCareer × Nomba Hackathon
+
+
+---
+
+## 🆕 Latest Updates (v2.0)
+
+### 📊 Three New Dashboard Pages
+
+#### 1. Analytics Dashboard
+- **Revenue Overview** - Monthly revenue with growth percentage and trend charts
+- **Expense Tracking** - Categorized spending with pie charts
+- **Net Profit Margins** - Real-time profitability analysis
+- **Payment Channels Breakdown** - Visual distribution across payment methods
+- **Transaction Volume Trends** - 7-day bar charts with daily amounts
+- **Top Performers** - Ranked list of best-paying tenants
+- **Key Metrics Summary** - Total transactions, paid tenants, active employees
+
+#### 2. Settings Panel
+- **Appearance Settings** - Dark mode, sound effects, compact mode
+- **Notification Management** - Push notifications, email/SMS alerts
+- **Business Configuration** - Language (English/Pidgin), currency display
+- **Account Information** - Business details, Nomba Merchant ID, account status
+- **Security Settings** - 2FA, API keys, transaction PIN
+- **Nomba API Configuration** - Live connection status, test API connection, toggle between live/simulation modes
+
+#### 3. Help & Support Center
+- **Quick Actions** - Documentation, contact support, submit feedback
+- **Contact Information** - Email, phone, support hours, live chat
+- **Office Location** - Physical address with map integration
+- **FAQ Section** - Searchable knowledge base with 6+ common questions
+- **System Status Dashboard** - Real-time uptime monitoring for all services
+- **Version Information** - App version, changelog, update checker
+
+### 🔌 Full Nomba API Integration
+
+#### Live API Features
+- ✅ **Authentication System** - Automatic token management and refresh
+- ✅ **Payment Link Creation** - Real API calls to Nomba Checkout
+- ✅ **Bulk Payout Processing** - One-click salary disbursement via Nomba
+- ✅ **Balance Synchronization** - Real-time account balance fetching
+- ✅ **Transaction History** - Pull actual transaction data
+- ✅ **Virtual Account Creation** - Generate accounts for tenants
+- ✅ **Bank List Retrieval** - Get supported banks for payouts
+- ✅ **Transaction Verification** - Confirm payment status
+
+#### Dual Mode Operation
+- **Live API Mode** 🟢 - Real Nomba API integration with actual credentials
+- **Simulation Mode** 🟡 - Mock data for testing without API calls
+- **Seamless Switching** - Toggle between modes in Settings or header
+- **Automatic Fallback** - If API fails, gracefully switches to simulation
+- **Connection Indicator** - Visual status in header with WiFi icon
+
+#### API Architecture
+```
+src/
+├── services/
+│   ├── nombaApi.ts          # Core API service layer
+│   └── webhookHandler.ts    # Webhook processing engine
+├── hooks/
+│   └── useNombaApi.ts       # React hook for components
+└── .env                     # Secure credential storage
+```
+
+#### Credentials Configured
+- **Parent Account ID**: `f666ef9b-888e-4799-85ce-acb505b28023`
+- **Sub-Account ID**: `3f550c64-55ed-42b8-ac1d-9305ec2781d3`
+- **TEST Mode**: Active (706df6c4-b8bb-4130-88c4-d21b052f8631)
+- **LIVE Mode**: Ready (e5e85b13-f560-4643-814e-c87435dbbc15)
+
+See [NOMBA_API_INTEGRATION.md](./NOMBA_API_INTEGRATION.md) for complete API documentation.
+
+---
+
+## 📈 Commit History
+
+The project includes **24+ commits** with incremental feature additions:
+
+1. ✅ Add new page navigation (Analytics, Settings, Help)
+2. ✅ Create Analytics page with charts and metrics
+3. ✅ Build Settings panel with all configurations
+4. ✅ Develop Help center with FAQs and support
+5. ✅ Add CSS animations for new pages
+6. ✅ Integrate Nomba API service layer
+7. ✅ Create useNombaApi React hook
+8. ✅ Add webhook processing system
+9. ✅ Implement payment link creation
+10. ✅ Add bulk payout functionality
+11. ✅ Display API connection status
+12. ✅ Add API configuration panel
+13. ✅ Create comprehensive documentation
+14. ✅ Bug fixes and TypeScript improvements
+
+---
+
+## 🎯 Roadmap
+
+- [ ] Add transaction filtering by date range
+- [ ] Export analytics reports as PDF/CSV
+- [ ] Multi-language support expansion
+- [ ] Mobile responsive optimization
+- [ ] Dark/Light theme toggle
+- [ ] Webhook signature verification
+- [ ] Real-time WebSocket updates
+- [ ] Email notification system
+- [ ] SMS integration with Twilio
+- [ ] Advanced AI fraud detection
+
+---
+
+## 📞 Support
+
+### For Nomba API Issues
+- 📧 Email: support@nomba.com
+- 📖 Documentation: https://docs.nomba.com
+- 🔑 Dashboard: https://dashboard.nomba.com
+
+### For PulseStack Application
+- 💬 GitHub Issues: https://github.com/bakarezainab/PulseStack/issues
+- 📧 Email: support@pulsestack.io
+- 🌐 Website: https://pulsestack.io
+
+---
+
+**Made with ❤️ in Nigeria | DevCareer × Nomba Hackathon 2026**
