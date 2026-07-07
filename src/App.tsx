@@ -147,6 +147,11 @@ function App() {
     smsAlerts: false
   });
 
+  // Nomba API Integration
+  const nombaApi = useNombaApi();
+  const [apiConnected, setApiConnected] = useState(false);
+  const [useRealApi, setUseRealApi] = useState(true); // Toggle between real API and simulation
+
   // Heartbeat Logo / Live Chart Simulator
   useEffect(() => {
     const interval = setInterval(() => {
@@ -162,6 +167,28 @@ function App() {
     }, 150);
     return () => clearInterval(interval);
   }, []);
+
+  // Check Nomba API connection on mount
+  useEffect(() => {
+    const checkApiConnection = async () => {
+      if (useRealApi && nombaApi.config.isConfigured) {
+        try {
+          const result = await nombaApi.getBalance();
+          if (result.success && result.data) {
+            setApiConnected(true);
+            setBalance(result.data.availableBalance);
+            addLog('NOMBA_API', `Successfully connected to Nomba API. Balance: ₦${result.data.availableBalance.toLocaleString()}`);
+          }
+        } catch (error) {
+          setApiConnected(false);
+          addLog('NOMBA_API', 'Using simulation mode - API credentials not configured or connection failed');
+        }
+      } else {
+        setApiConnected(false);
+      }
+    };
+    checkApiConnection();
+  }, [useRealApi]);
 
   // Scroll to bottom of chat
   useEffect(() => {
@@ -186,7 +213,7 @@ function App() {
   };
 
   // AI Action Execution
-  const triggerAiAction = (action: string, payload?: any) => {
+  const triggerAiAction = async (action: string, payload?: any) => {
     if (action === "NAVIGATE_RENT") {
       setActiveTab('rent');
     } else if (action === "NAVIGATE_PAYROLL") {
@@ -199,22 +226,65 @@ function App() {
       setActiveTab('diaspora');
     } else if (action === "CREATE_PAYMENT_LINK" && payload) {
       const { sender, amount, description } = payload;
-      const newTx: Transaction = {
-        id: `TX-${Math.floor(1000 + Math.random() * 9000)}`,
-        amount: Number(amount),
-        type: 'payment_link',
-        status: 'pending',
-        sender,
-        recipient: "Z-Pulse Fashion House",
-        date: new Date().toISOString(),
-        description,
-        paymentChannel: "Nomba Checkout"
-      };
-      setTransactions(prev => [newTx, ...prev]);
-      addLog('NOMBA_API', `Payment Link API called: Created Link for ${sender} - ₦${Number(amount).toLocaleString()}`);
-      addLog('WEBHOOK', `Pending link generated. Webhook endpoint listening...`);
-      showToast(`Payment link for ₦${Number(amount).toLocaleString()} created successfully!`, 'info');
+      
+      // Try real API first, fall back to simulation
+      if (useRealApi && apiConnected) {
+        try {
+          const result = await nombaApi.createPaymentLink({
+            amount: Number(amount),
+            currency: 'NGN',
+            description,
+            customerName: sender
+          });
+          
+          if (result.success && result.data) {
+            const newTx: Transaction = {
+              id: result.data.id,
+              amount: Number(amount),
+              type: 'payment_link',
+              status: 'pending',
+              sender,
+              recipient: "Z-Pulse Fashion House",
+              date: new Date().toISOString(),
+              description,
+              paymentChannel: "Nomba Checkout"
+            };
+            setTransactions(prev => [newTx, ...prev]);
+            addLog('NOMBA_API', `Payment Link API called: Created Link for ${sender} - ₦${Number(amount).toLocaleString()}`);
+            addLog('WEBHOOK', `Payment link URL: ${result.data.link}`);
+            showToast(`Payment link created: ${result.data.link}`, 'info');
+          } else {
+            throw new Error(result.message || 'Failed to create payment link');
+          }
+        } catch (error) {
+          addLog('NOMBA_API', `API Error: ${error instanceof Error ? error.message : 'Unknown error'}. Using simulation.`);
+          // Fall back to simulation
+          createSimulatedPaymentLink(sender, amount, description);
+        }
+      } else {
+        // Simulation mode
+        createSimulatedPaymentLink(sender, amount, description);
+      }
     }
+  };
+
+  // Simulated payment link creation (fallback)
+  const createSimulatedPaymentLink = (sender: string, amount: number, description: string) => {
+    const newTx: Transaction = {
+      id: `TX-${Math.floor(1000 + Math.random() * 9000)}`,
+      amount: Number(amount),
+      type: 'payment_link',
+      status: 'pending',
+      sender,
+      recipient: "Z-Pulse Fashion House",
+      date: new Date().toISOString(),
+      description,
+      paymentChannel: "Nomba Checkout"
+    };
+    setTransactions(prev => [newTx, ...prev]);
+    addLog('NOMBA_API', `Payment Link API called: Created Link for ${sender} - ₦${Number(amount).toLocaleString()}`);
+    addLog('WEBHOOK', `Pending link generated. Webhook endpoint listening...`);
+    showToast(`Payment link for ₦${Number(amount).toLocaleString()} created successfully!`, 'info');
   };
 
   // Chat Submit
