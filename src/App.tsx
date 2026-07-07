@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Activity,
   CreditCard,
@@ -37,7 +37,9 @@ import {
   Calendar,
   ExternalLink,
   BookOpen,
-  Zap
+  Zap,
+  Wifi,
+  WifiOff
 } from 'lucide-react';
 import type {
   Transaction,
@@ -57,6 +59,8 @@ import {
   getBusinessHealth,
   parseAiCommand
 } from './mockData';
+import { useNombaApi } from './hooks/useNombaApi';
+import { simulateWebhook, processWebhook, type NombaWebhookPayload } from './services/webhookHandler';
 
 interface WebhookLog {
   id: string;
