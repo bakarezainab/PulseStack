@@ -334,8 +334,8 @@ body {
 /* DASHBOARD / APP SHELL LAYOUT */
 .app-container {
   display: grid;
-  grid-template-columns: 260px 1fr 340px;
-  grid-template-rows: 70px 1fr 180px;
+  grid-template-columns: 280px 1fr 360px;
+  grid-template-rows: 80px 1fr 200px;
   grid-template-areas:
     "sidebar header ai-chat"
     "sidebar content ai-chat"
@@ -344,6 +344,7 @@ body {
   width: 100vw;
   overflow: hidden;
   background: radial-gradient(circle at 50% 0%, #101524 0%, var(--bg-darkest) 70%);
+  gap: 0;
 }
 
 @media (max-width: 1200px) {
@@ -376,20 +377,22 @@ body {
 /* Sidebar Styling */
 .sidebar {
   grid-area: sidebar;
-  background-color: var(--bg-darker);
+  background: linear-gradient(180deg, var(--bg-darker) 0%, #0a0c12 100%);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow-y: auto;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .brand-section {
-  padding: 24px 20px;
+  padding: 28px 24px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.05) 0%, transparent 100%);
 }
 
 /* Pulse Chart Logo */
@@ -433,27 +436,45 @@ body {
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
+  gap: 14px;
+  padding: 12px 16px;
+  margin: 0 8px;
   color: var(--text-secondary);
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   border: 1px solid transparent;
+  position: relative;
 }
 
 .nav-item:hover {
-  background-color: var(--bg-hover);
+  background: linear-gradient(135deg, var(--bg-hover) 0%, rgba(0, 102, 255, 0.05) 100%);
   color: var(--text-primary);
+  transform: translateX(4px);
+  border-color: rgba(0, 102, 255, 0.2);
 }
 
 .nav-item.active {
-  background-color: var(--electric-blue-glow);
-  color: var(--text-primary);
-  border-color: rgba(0, 102, 255, 0.3);
+  background: linear-gradient(135deg, var(--electric-blue-glow) 0%, rgba(0, 102, 255, 0.15) 100%);
+  color: var(--electric-blue-bright);
+  border-color: rgba(0, 102, 255, 0.4);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: var(--electric-blue);
+  border-radius: 0 4px 4px 0;
 }
 
 .nav-item svg {
@@ -473,14 +494,15 @@ body {
 /* Header Styling */
 .header {
   grid-area: header;
-  background-color: rgba(13, 15, 20, 0.85);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(13, 15, 20, 0.95) 0%, rgba(19, 23, 34, 0.95) 100%);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
-  padding: 0 24px;
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   z-index: 10;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .greeting-area {
@@ -533,9 +555,19 @@ body {
 /* Content Area */
 .main-content {
   grid-area: content;
-  padding: 24px 24px 80px 24px;
+  padding: 32px;
   overflow-y: auto;
-  background-color: transparent;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+/* Better scrollbar for main content */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--electric-blue) 0%, var(--accent-gold) 100%);
+  border-radius: 10px;
 }
 
 /* AI Sidebar / Chat */
@@ -760,21 +792,40 @@ body {
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 
 .card {
-  background-color: var(--bg-card);
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(19, 23, 34, 0.8) 100%);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 24px;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover {
-  border-color: var(--border-light);
+  border-color: var(--electric-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.15);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--electric-blue) 0%, var(--accent-gold) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .card-header-flex {
