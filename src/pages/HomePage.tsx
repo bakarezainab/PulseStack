@@ -10,13 +10,13 @@ export default function HomePage({ onEnterDashboard }: HomePageProps) {
     <>
       {/* Hero Section */}
       <section className="landing-hero">
-        <div className="landing-hero-content">
-          <div className="landing-badge">DEVCAREER X NOMBA HACKATHON ENTRY</div>
-          <h1 className="landing-title">AI-Powered Payment Infrastructure for Nigerian Businesses</h1>
-          <p className="landing-subtitle">
+        <div className="landing-hero-content animate-fade-in-up">
+          <div className="landing-badge animate-scale-in animate-delay-200">DEVCAREER X NOMBA HACKATHON ENTRY</div>
+          <h1 className="landing-title animate-fade-in-up animate-delay-300">AI-Powered Payment Infrastructure for Nigerian Businesses</h1>
+          <p className="landing-subtitle animate-fade-in-up animate-delay-400">
             PulseStack is the intelligence layer your business has been missing. We wrap Nomba's production-ready payment APIs inside a powerful, automated intelligence framework. Accept USDT, predict rent defaults, audit payroll, and get real-time business health telemetry—all powered by Claude AI.
           </p>
-          <div className="landing-hero-actions">
+          <div className="landing-hero-actions animate-fade-in-up animate-delay-500">
             <button className="btn btn-gold" style={{ padding: '14px 28px', fontSize: '15px' }} onClick={onEnterDashboard}>
               Launch Sandbox Dashboard <ArrowRight size={16} />
             </button>
@@ -26,8 +26,19 @@ export default function HomePage({ onEnterDashboard }: HomePageProps) {
           </div>
         </div>
 
-        <div className="landing-hero-image-wrapper">
-          <img src="/pulse_stack_hero.png" alt="PulseStack Financial Terminal" className="landing-hero-image" />
+        <div className="landing-hero-image-wrapper animate-slide-right animate-delay-400">
+          <div className="animate-float">
+            <img 
+              src="/pulse_stack_hero.png" 
+              alt="PulseStack Financial Terminal" 
+              className="landing-hero-image" 
+              style={{ 
+                borderRadius: '20px', 
+                boxShadow: '0 20px 60px rgba(0, 102, 255, 0.3)',
+                border: '1px solid rgba(51, 133, 255, 0.3)'
+              }}
+            />
+          </div>
         </div>
       </section>
 
@@ -61,7 +72,7 @@ export default function HomePage({ onEnterDashboard }: HomePageProps) {
         </div>
 
         <div className="landing-features-grid">
-          <div className="landing-feature-card">
+          <div className="landing-feature-card animate-fade-in-up animate-delay-100">
             <div className="landing-feature-icon">
               <CreditCard size={24} />
             </div>
@@ -71,7 +82,7 @@ export default function HomePage({ onEnterDashboard }: HomePageProps) {
             </p>
           </div>
 
-          <div className="landing-feature-card">
+          <div className="landing-feature-card animate-fade-in-up animate-delay-200">
             <div className="landing-feature-icon">
               <Building size={24} />
             </div>
@@ -81,7 +92,7 @@ export default function HomePage({ onEnterDashboard }: HomePageProps) {
             </p>
           </div>
 
-          <div className="landing-feature-card">
+          <div className="landing-feature-card animate-fade-in-up animate-delay-300">
             <div className="landing-feature-icon">
               <Users size={24} />
             </div>
@@ -91,7 +102,7 @@ export default function HomePage({ onEnterDashboard }: HomePageProps) {
             </p>
           </div>
 
-          <div className="landing-feature-card">
+          <div className="landing-feature-card animate-fade-in-up animate-delay-400">
             <div className="landing-feature-icon">
               <Package size={24} />
             </div>
@@ -101,7 +112,7 @@ export default function HomePage({ onEnterDashboard }: HomePageProps) {
             </p>
           </div>
 
-          <div className="landing-feature-card">
+          <div className="landing-feature-card animate-fade-in-up animate-delay-500">
             <div className="landing-feature-icon">
               <PieChart size={24} />
             </div>
@@ -111,7 +122,7 @@ export default function HomePage({ onEnterDashboard }: HomePageProps) {
             </p>
           </div>
 
-          <div className="landing-feature-card">
+          <div className="landing-feature-card animate-fade-in-up animate-delay-600">
             <div className="landing-feature-icon">
               <TrendingUp size={24} />
             </div>

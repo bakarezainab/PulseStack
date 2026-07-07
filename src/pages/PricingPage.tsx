@@ -9,11 +9,11 @@ export default function PricingPage({ onEnterDashboard }: PricingPageProps) {
     <>
       {/* Hero Section */}
       <section style={{ padding: '100px 20px 60px', maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-        <div className="landing-badge" style={{ margin: '0 auto 24px' }}>PRICING</div>
-        <h1 style={{ fontSize: '56px', fontWeight: 900, marginBottom: '24px', lineHeight: '1.1' }}>
+        <div className="landing-badge animate-scale-in" style={{ margin: '0 auto 24px' }}>PRICING</div>
+        <h1 className="animate-fade-in-up animate-delay-100" style={{ fontSize: '56px', fontWeight: 900, marginBottom: '24px', lineHeight: '1.1' }}>
           Simple, Transparent Pricing
         </h1>
-        <p style={{ fontSize: '18px', color: 'var(--text-secondary)', maxWidth: '700px', margin: '0 auto 40px', lineHeight: '1.6' }}>
+        <p className="animate-fade-in-up animate-delay-200" style={{ fontSize: '18px', color: 'var(--text-secondary)', maxWidth: '700px', margin: '0 auto 40px', lineHeight: '1.6' }}>
           No hidden fees. No surprises. Pay only for what you use. All plans include Nomba's standard transaction fees.
         </p>
       </section>
@@ -22,7 +22,7 @@ export default function PricingPage({ onEnterDashboard }: PricingPageProps) {
       <section style={{ padding: '40px 20px 80px', maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px' }}>
           {/* Starter Plan */}
-          <div style={{ padding: '40px 32px', background: 'var(--bg-card)', borderRadius: '20px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
+          <div className="animate-fade-in-up animate-delay-100" style={{ padding: '40px 32px', background: 'var(--bg-card)', borderRadius: '20px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '12px' }}>Starter</h3>
             <div style={{ margin: '24px 0' }}>
               <span style={{ fontSize: '48px', fontWeight: 800, color: 'var(--electric-blue-bright)' }}>Free</span>
@@ -67,7 +67,7 @@ export default function PricingPage({ onEnterDashboard }: PricingPageProps) {
           </div>
 
           {/* Professional Plan */}
-          <div style={{ padding: '40px 32px', background: 'linear-gradient(135deg, var(--electric-blue-glow) 0%, rgba(0, 102, 255, 0.1) 100%)', borderRadius: '20px', border: '2px solid var(--electric-blue)', display: 'flex', flexDirection: 'column', position: 'relative', transform: 'scale(1.05)' }}>
+          <div className="animate-scale-in animate-delay-200" style={{ padding: '40px 32px', background: 'linear-gradient(135deg, var(--electric-blue-glow) 0%, rgba(0, 102, 255, 0.1) 100%)', borderRadius: '20px', border: '2px solid var(--electric-blue)', display: 'flex', flexDirection: 'column', position: 'relative', transform: 'scale(1.05)' }}>
             <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'var(--electric-blue)', padding: '6px 20px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, color: 'white' }}>
               MOST POPULAR
             </div>
@@ -123,7 +123,7 @@ export default function PricingPage({ onEnterDashboard }: PricingPageProps) {
           </div>
 
           {/* Enterprise Plan */}
-          <div style={{ padding: '40px 32px', background: 'var(--bg-card)', borderRadius: '20px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
+          <div className="animate-fade-in-up animate-delay-300" style={{ padding: '40px 32px', background: 'var(--bg-card)', borderRadius: '20px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '12px' }}>Enterprise</h3>
             <div style={{ margin: '24px 0' }}>
               <span style={{ fontSize: '48px', fontWeight: 800, color: 'var(--accent-gold)' }}>Custom</span>

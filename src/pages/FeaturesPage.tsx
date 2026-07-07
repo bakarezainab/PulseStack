@@ -10,11 +10,11 @@ export default function FeaturesPage({ onEnterDashboard }: FeaturesPageProps) {
     <>
       {/* Hero Section */}
       <section style={{ padding: '100px 20px 60px', maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-        <div className="landing-badge" style={{ margin: '0 auto 24px' }}>FEATURES</div>
-        <h1 style={{ fontSize: '56px', fontWeight: 900, marginBottom: '24px', lineHeight: '1.1' }}>
+        <div className="landing-badge animate-scale-in" style={{ margin: '0 auto 24px' }}>FEATURES</div>
+        <h1 className="animate-fade-in-up animate-delay-100" style={{ fontSize: '56px', fontWeight: 900, marginBottom: '24px', lineHeight: '1.1' }}>
           Everything You Need to Run Your Business
         </h1>
-        <p style={{ fontSize: '18px', color: 'var(--text-secondary)', maxWidth: '700px', margin: '0 auto 40px', lineHeight: '1.6' }}>
+        <p className="animate-fade-in-up animate-delay-200" style={{ fontSize: '18px', color: 'var(--text-secondary)', maxWidth: '700px', margin: '0 auto 40px', lineHeight: '1.6' }}>
           PulseStack combines Nomba's payment infrastructure with Claude AI to give you superpowers. From rent collection to inventory management, every feature is built to save you time and money.
         </p>
       </section>
