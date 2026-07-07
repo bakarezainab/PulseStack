@@ -965,8 +965,39 @@ function App() {
         <div className="greeting-area">
           <span className="greeting-text">Good morning, Zainab. Your business pulse is strong today 📈</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '4px', flexWrap: 'wrap' }}>
-            <span className="greeting-subtext">Zee Retail & Fashion House • Nomba Merchant ID: 893427</span>
+            <span className="greeting-subtext">Zee Retail & Fashion House • Nomba Merchant ID: {nombaApi.config.accountId.slice(0, 8)}...</span>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div 
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px', 
+                  fontSize: '10px', 
+                  color: 'var(--text-secondary)', 
+                  background: apiConnected ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-darker)', 
+                  padding: '2px 6px', 
+                  borderRadius: '4px', 
+                  border: apiConnected ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid var(--border-color)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => setUseRealApi(!useRealApi)}
+                title={apiConnected ? 'Connected to Nomba API' : 'Using simulation mode'}
+              >
+                {apiConnected ? (
+                  <Wifi size={10} style={{ color: 'var(--success-green)' }} />
+                ) : (
+                  <WifiOff size={10} style={{ color: 'var(--warning-yellow)' }} />
+                )}
+                <span style={{ 
+                  width: '5px', 
+                  height: '5px', 
+                  borderRadius: '50%', 
+                  backgroundColor: apiConnected ? 'var(--success-green)' : 'var(--warning-yellow)', 
+                  boxShadow: apiConnected ? '0 0 4px var(--success-green)' : '0 0 4px var(--warning-yellow)', 
+                  display: 'inline-block' 
+                }}></span>
+                {apiConnected ? 'API: Connected' : 'API: Simulation'}
+              </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', color: 'var(--text-secondary)', background: 'var(--bg-darker)', padding: '2px 6px', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
                 <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--success-green)', boxShadow: '0 0 4px var(--success-green)', display: 'inline-block' }}></span>
                 Collections: Live
