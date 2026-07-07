@@ -13,7 +13,7 @@
 
 **PulseStack** is the next-generation financial intelligence layer built for Nigerian merchants, landlords, and cooperative managers. It sits on top of **Nomba's** production-ready payment APIs, wrapping them inside a powerful automated intelligence framework that helps businesses monitor cash flow, automate payroll, predict defaults, and optimize operations — all powered by AI.
 
-> 🏆 Built for the **DevCareer × Nomba Hackathon 2025** — demonstrating how modern fintech APIs paired with natural language AI and predictive diagnostics can truly elevate the merchant experience in Nigeria.
+> 🏆 Built for the **DevCareer × Nomba Hackathon 2026** — demonstrating how modern fintech APIs paired with natural language AI and predictive diagnostics can truly elevate the merchant experience in Nigeria.
 
 </div>
 
@@ -207,7 +207,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## 📄 License
 
-MIT © 2025 [Zainab Bakare](https://github.com/bakarezainab) — Built with ❤️ for the DevCareer × Nomba Hackathon
+MIT © 2026 [Zainab Bakare](https://github.com/bakarezainab) — Built for the DevCareer × Nomba Hackathon
 
 
 ---
@@ -268,37 +268,10 @@ src/
 │   └── webhookHandler.ts    # Webhook processing engine
 ├── hooks/
 │   └── useNombaApi.ts       # React hook for components
-└── .env                     # Secure credential storage
+└── .env.example             # Environment variables template
 ```
 
-#### Credentials Configured
-- **Parent Account ID**: `f666ef9b-888e-4799-85ce-acb505b28023`
-- **Sub-Account ID**: `3f550c64-55ed-42b8-ac1d-9305ec2781d3`
-- **TEST Mode**: Active (706df6c4-b8bb-4130-88c4-d21b052f8631)
-- **LIVE Mode**: Ready (e5e85b13-f560-4643-814e-c87435dbbc15)
-
-See [NOMBA_API_INTEGRATION.md](./NOMBA_API_INTEGRATION.md) for complete API documentation.
-
----
-
-## 📈 Commit History
-
-The project includes **24+ commits** with incremental feature additions:
-
-1. ✅ Add new page navigation (Analytics, Settings, Help)
-2. ✅ Create Analytics page with charts and metrics
-3. ✅ Build Settings panel with all configurations
-4. ✅ Develop Help center with FAQs and support
-5. ✅ Add CSS animations for new pages
-6. ✅ Integrate Nomba API service layer
-7. ✅ Create useNombaApi React hook
-8. ✅ Add webhook processing system
-9. ✅ Implement payment link creation
-10. ✅ Add bulk payout functionality
-11. ✅ Display API connection status
-12. ✅ Add API configuration panel
-13. ✅ Create comprehensive documentation
-14. ✅ Bug fixes and TypeScript improvements
+**Note**: Configure your Nomba API credentials in a `.env` file using `.env.example` as a template.
 
 ---
 
@@ -316,19 +289,3 @@ The project includes **24+ commits** with incremental feature additions:
 - [ ] Advanced AI fraud detection
 
 ---
-
-## 📞 Support
-
-### For Nomba API Issues
-- 📧 Email: support@nomba.com
-- 📖 Documentation: https://docs.nomba.com
-- 🔑 Dashboard: https://dashboard.nomba.com
-
-### For PulseStack Application
-- 💬 GitHub Issues: https://github.com/bakarezainab/PulseStack/issues
-- 📧 Email: support@pulsestack.io
-- 🌐 Website: https://pulsestack.io
-
----
-
-**Made with ❤️ in Nigeria | DevCareer × Nomba Hackathon 2026**
