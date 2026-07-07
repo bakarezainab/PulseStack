@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import {
   Activity,
   CreditCard,
@@ -17,7 +18,6 @@ import {
   MessageSquare,
   X,
   FileText,
-  ArrowRight,
   Settings,
   BarChart3,
   HelpCircle,
@@ -60,6 +60,11 @@ import {
   parseAiCommand
 } from './mockData';
 import { useNombaApi } from './hooks/useNombaApi';
+import LandingLayout from './components/LandingLayout';
+import HomePage from './pages/HomePage';
+import FeaturesPage from './pages/FeaturesPage';
+import PricingPage from './pages/PricingPage';
+import AboutPage from './pages/AboutPage';
 
 interface WebhookLog {
   id: string;
@@ -659,206 +664,24 @@ function App() {
     }, 1000);
   };
 
+  const handleEnterDashboard = () => {
+    setViewMode('dashboard');
+    setActiveTab('dashboard');
+  };
+
   if (viewMode === 'landing') {
     return (
-      <div className="landing-container">
-        {/* Landing Page Header */}
-        <header className="landing-header">
-          <div className="brand-section" style={{ borderBottom: 'none', padding: 0 }}>
-            <div className="pulse-logo">
-              <div className="pulse-bar" />
-              <div className="pulse-bar" />
-              <div className="pulse-bar" />
-              <div className="pulse-bar" />
-              <div className="pulse-bar" />
-            </div>
-            <span className="brand-name">PulseStack</span>
-          </div>
-
-          <nav className="landing-nav">
-            <a href="#features" className="landing-nav-link">Features</a>
-            <a href="#diaspora" className="landing-nav-link">Remittance</a>
-            <button className="btn" onClick={() => setViewMode('dashboard')}>
-              Enter Sandbox Dashboard <ArrowRight size={16} />
-            </button>
-          </nav>
-        </header>
-
-        {/* Hero Section */}
-        <section className="landing-hero">
-          <div className="landing-hero-content">
-            <div className="landing-badge">DEVCAREER X NOMBA HACKATHON ENTRY</div>
-            <h1 className="landing-title">AI-Powered Payment Infrastructure for Nigerian Businesses</h1>
-            <p className="landing-subtitle">
-              PulseStack is the intelligence layer your business has been missing. We wrap Nomba's production-ready payment APIs inside a powerful, automated intelligence framework. Accept USDT, predict rent defaults, audit payroll, and get real-time business health telemetry—all powered by Claude AI.
-            </p>
-            <div className="landing-hero-actions">
-              <button className="btn btn-gold" style={{ padding: '14px 28px', fontSize: '15px' }} onClick={() => setViewMode('dashboard')}>
-                Launch Sandbox Dashboard <ArrowRight size={16} />
-              </button>
-              <a href="#features" className="btn btn-secondary" style={{ padding: '14px 28px', fontSize: '15px' }}>
-                Explore Product Suite
-              </a>
-            </div>
-          </div>
-
-          <div className="landing-hero-image-wrapper">
-            <img src="/pulse_stack_hero.png" alt="PulseStack Financial Terminal" className="landing-hero-image" />
-          </div>
-        </section>
-
-        {/* Stats Block */}
-        <section className="landing-stats">
-          <div className="landing-stat-item">
-            <span className="landing-stat-num">₦4.5M+</span>
-            <span className="landing-stat-label">Simulated Vol.</span>
-          </div>
-          <div className="landing-stat-item">
-            <span className="landing-stat-num">0.8s</span>
-            <span className="landing-stat-label">Bulk Payout Latency</span>
-          </div>
-          <div className="landing-stat-item">
-            <span className="landing-stat-num">99.8%</span>
-            <span className="landing-stat-label">AI Card Fraud Detection</span>
-          </div>
-          <div className="landing-stat-item">
-            <span className="landing-stat-num">T+1</span>
-            <span className="landing-stat-label">Nomba Settlement</span>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section id="features" style={{ padding: '80px 20px 40px', maxWidth: '1400px', margin: '0 auto' }}>
-          <div className="landing-section-title-wrap">
-            <h2 className="landing-section-title">The Complete AI-First Product Suite</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
-              Every feature in PulseStack is AI-first. Nomba handles the payment rails. Claude handles the intelligence. You just run your business.
-            </p>
-          </div>
-
-          <div className="landing-features-grid">
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <CreditCard size={24} />
-              </div>
-              <h3 className="landing-feature-title">Smart Payment Collection</h3>
-              <p className="landing-feature-desc">
-                Accept payments via Nomba payment links, virtual accounts, or QR. PulseAI monitors transactions in real time to flag fraud before settlement.
-              </p>
-            </div>
-
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <Building size={24} />
-              </div>
-              <h3 className="landing-feature-title">Rent & Property Manager</h3>
-              <p className="landing-feature-desc">
-                Landlords manage tenants and collections. AI predicts which tenants are likely to default based on history and drafts auto-nudge reminders.
-              </p>
-            </div>
-
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <Users size={24} />
-              </div>
-              <h3 className="landing-feature-title">Payroll & Staff Manager</h3>
-              <p className="landing-feature-desc">
-                Execute bulk payouts in one click using Nomba Payouts. AI scans payroll inputs before execution to catch duplicate accounts or name mismatches.
-              </p>
-            </div>
-
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <Package size={24} />
-              </div>
-              <h3 className="landing-feature-title">Inventory & Shop Intelligence</h3>
-              <p className="landing-feature-desc">
-                Sales auto-deduct from stock upon webhook confirmation. AI predicts stockout dates and drafts restock suggestions based on sales velocity.
-              </p>
-            </div>
-
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <PieChart size={24} />
-              </div>
-              <h3 className="landing-feature-title">Expense Intelligence</h3>
-              <p className="landing-feature-desc">
-                Expenses auto-import from Nomba history. AI categorizes descriptions (Generator/Fuel, Market Run) and warns of wasteful spending leaks.
-              </p>
-            </div>
-
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <TrendingUp size={24} />
-              </div>
-              <h3 className="landing-feature-title">Ajo, Cooperative & Event Pools</h3>
-              <p className="landing-feature-desc">
-                Organize Owambe or cooperative pools. Members contribute via Nomba checkout, while AI spots delinquency risks and auto-payouts to beneficiaries.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Remittance Block */}
-        <section id="diaspora" style={{ padding: '40px 20px 80px', maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '24px', padding: '40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }}>
-            <div>
-              <div className="landing-badge" style={{ marginBottom: '16px' }}>CROSS-BORDER RAILS</div>
-              <h2 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '16px' }}>Diaspora Remittance & Stablecoin Acceptance</h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: '1.6', marginBottom: '24px' }}>
-                Receive USDT/USDC directly from family members or customers abroad. PulseStack dynamically converts stablecoins to NGN at live parallel rates and routes funds to recipients instantly via Nomba payouts. 
-              </p>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: 'var(--text-primary)' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ color: 'var(--success-green)', fontWeight: 'bold' }}>✓</span> Save 12% on bank remittance conversion rates.
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ color: 'var(--success-green)', fontWeight: 'bold' }}>✓</span> Settle directly into local Nomba merchant accounts.
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ color: 'var(--success-green)', fontWeight: 'bold' }}>✓</span> Real-time FX Advisory tells you the best time to send.
-                </li>
-              </ul>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', background: 'var(--bg-darker)', padding: '30px', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontWeight: 700 }}>Conversion rate</span>
-                <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-gold)' }}>₦1,550.00 / $1</span>
-              </div>
-              <div style={{ height: '1px', backgroundColor: 'var(--border-color)' }} />
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <Globe size={32} style={{ color: 'var(--electric-blue-bright)' }} />
-                <div>
-                  <h4 style={{ fontSize: '14px', fontWeight: 700 }}>Instant Webhook Routing</h4>
-                  <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>USDT deposited triggers standard Nomba payout within 0.8 seconds.</p>
-                </div>
-              </div>
-              <button className="btn" style={{ width: '100%' }} onClick={() => {
-                setViewMode('dashboard');
-                setActiveTab('diaspora');
-              }}>
-                Try Sandbox Remittance Portal
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonial */}
-        <section className="landing-testimonial">
-          <p className="landing-testimonial-quote">
-            "Before PulseStack, reconciling my boutique's sales with bank transfers was a nightmare. Now, Nomba handles the collections, and the AI handles the rest. My business health score is up to 88%!"
-          </p>
-          <span className="landing-testimonial-author" style={{ display: 'block', marginBottom: '40px' }}>Zainab Alao, Z-Pulse Fashion House</span>
-          <button className="btn btn-gold" style={{ padding: '16px 32px', fontSize: '16px' }} onClick={() => setViewMode('dashboard')}>
-            Enter Sandbox Dashboard <ArrowRight size={18} />
-          </button>
-        </section>
-
-        {/* Footer */}
-        <footer className="landing-footer">
-          <p>© 2026 PulseStack. Built for the DevCareer x Nomba Hackathon. All payment operations simulated via Nomba Sandboxed Sandbox APIs.</p>
-        </footer>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingLayout onEnterDashboard={handleEnterDashboard} />}>
+            <Route index element={<HomePage onEnterDashboard={handleEnterDashboard} />} />
+            <Route path="features" element={<FeaturesPage onEnterDashboard={handleEnterDashboard} />} />
+            <Route path="pricing" element={<PricingPage onEnterDashboard={handleEnterDashboard} />} />
+            <Route path="about" element={<AboutPage onEnterDashboard={handleEnterDashboard} />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     );
   }
 
