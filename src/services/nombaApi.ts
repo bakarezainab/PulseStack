@@ -5,9 +5,9 @@
 
 // API Configuration from environment variables
 const NOMBA_CONFIG = {
-  accountId: import.meta.env.VITE_NOMBA_ACCOUNT_ID || 'f666ef9b-888e-4799-85ce-acb505b28023',
-  subAccountId: import.meta.env.VITE_NOMBA_SUB_ACCOUNT_ID || '3f550c64-55ed-42b8-ac1d-9305ec2781d3',
-  clientId: import.meta.env.VITE_NOMBA_CLIENT_ID || '706df6c4-b8bb-4130-88c4-d21b052f8631',
+  accountId: import.meta.env.VITE_NOMBA_ACCOUNT_ID || '',
+  subAccountId: import.meta.env.VITE_NOMBA_SUB_ACCOUNT_ID || '',
+  clientId: import.meta.env.VITE_NOMBA_CLIENT_ID || '',
   privateKey: import.meta.env.VITE_NOMBA_PRIVATE_KEY || '',
   baseUrl: import.meta.env.VITE_NOMBA_API_BASE_URL || 'https://api.nomba.com'
 };
