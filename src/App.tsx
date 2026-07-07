@@ -3130,6 +3130,10 @@ function App() {
 
     </div>
   );
+  }
+
+  // Fallback return (should never reach here)
+  return null;
 }
 
 export default App;
