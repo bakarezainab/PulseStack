@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import {
   Activity,
   CreditCard,
@@ -669,26 +669,27 @@ function App() {
     setActiveTab('dashboard');
   };
 
+  // Render landing pages with routing
   if (viewMode === 'landing') {
     return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingLayout onEnterDashboard={handleEnterDashboard} />}>
-            <Route index element={<HomePage onEnterDashboard={handleEnterDashboard} />} />
-            <Route path="features" element={<FeaturesPage onEnterDashboard={handleEnterDashboard} />} />
-            <Route path="pricing" element={<PricingPage onEnterDashboard={handleEnterDashboard} />} />
-            <Route path="about" element={<AboutPage onEnterDashboard={handleEnterDashboard} />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingLayout onEnterDashboard={handleEnterDashboard} />}>
+          <Route index element={<HomePage onEnterDashboard={handleEnterDashboard} />} />
+          <Route path="features" element={<FeaturesPage onEnterDashboard={handleEnterDashboard} />} />
+          <Route path="pricing" element={<PricingPage onEnterDashboard={handleEnterDashboard} />} />
+          <Route path="about" element={<AboutPage onEnterDashboard={handleEnterDashboard} />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
     );
   }
 
-  return (
-    <div className="app-container" style={{
-      gridTemplateRows: isConsoleOpen ? '70px 1fr 180px' : '70px 1fr 40px'
-    }}>
+  // Render dashboard
+  if (viewMode === 'dashboard') {
+    return (
+      <div className="app-container" style={{
+        gridTemplateRows: isConsoleOpen ? '70px 1fr 180px' : '70px 1fr 40px'
+      }}>
       
       {/* Toast Notifications */}
       <div className="toast-container">
