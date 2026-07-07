@@ -2179,7 +2179,11 @@ function App() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {settings.darkMode ? <Moon size={18} style={{ color: 'var(--electric-blue-bright)' }} : <Sun size={18} style={{ color: 'var(--accent-gold)' }} />}
+                    {settings.darkMode ? (
+                      <Moon size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                    ) : (
+                      <Sun size={18} style={{ color: 'var(--accent-gold)' }} />
+                    )}
                     <div>
                       <div style={{ fontWeight: 600 }}>Dark Mode</div>
                       <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Use dark theme for better visibility</div>
@@ -2196,7 +2200,11 @@ function App() {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-darker)', borderRadius: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {settings.soundEffects ? <Volume2 size={18} style={{ color: 'var(--electric-blue-bright)' }} : <VolumeX size={18} style={{ color: 'var(--text-muted)' }} />}
+                    {settings.soundEffects ? (
+                      <Volume2 size={18} style={{ color: 'var(--electric-blue-bright)' }} />
+                    ) : (
+                      <VolumeX size={18} style={{ color: 'var(--text-muted)' }} />
+                    )}
                     <div>
                       <div style={{ fontWeight: 600 }}>Sound Effects</div>
                       <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Play sounds for transactions</div>
